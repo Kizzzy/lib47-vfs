@@ -6,8 +6,6 @@ import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
 import cn.kizzzy.vfs.IPackage;
 import cn.kizzzy.vfs.IStrategy;
-import cn.kizzzy.vfs.ListNode;
-import cn.kizzzy.vfs.ListParameter;
 import cn.kizzzy.vfs.handler.BytesFileHandler;
 import cn.kizzzy.vfs.handler.StringFileHandler;
 import cn.kizzzy.vfs.strategy.NopStrategy;
@@ -57,20 +55,6 @@ public abstract class PackageAdapter implements IPackage {
     public IFileHandler<?> getHandler(Type clazz) {
         return handlerKvs.get(clazz);
     }
-    
-    public ListNode list(String path, ListParameter param) {
-        try {
-            if (param == null) {
-                param = new ListParameter();
-            }
-            return listImpl(path.replace(undesired, separator), param);
-        } catch (Exception e) {
-            LogHelper.error(null, e);
-        }
-        return null;
-    }
-    
-    protected abstract ListNode listImpl(String path, ListParameter param) throws Exception;
     
     @Override
     public Object load(String path, Type clazz) {

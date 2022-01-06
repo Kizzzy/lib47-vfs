@@ -1,10 +1,17 @@
 package cn.kizzzy.vfs.tree;
 
-public class Leaf<T> {
+public class Leaf<T> extends Node<T> {
     
-    public String pack;
+    public final T item;
     
-    public String path;
+    public final String pack;
     
-    public T item;
+    public final String path;
+    
+    public Leaf(int id, String name, String pack, String path, T item) {
+        super(id, name, true);
+        this.pack = pack;
+        this.path = path;
+        this.item = item;
+    }
 }

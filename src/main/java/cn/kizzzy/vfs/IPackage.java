@@ -14,12 +14,6 @@ public interface IPackage {
         return (IFileHandler<T>) getHandler((Type) clazz);
     }
     
-    default ListNode list(String path) {
-        return list(path, null);
-    }
-    
-    ListNode list(String path, ListParameter param);
-    
     boolean exist(String path);
     
     Object load(String path, Type clazz);

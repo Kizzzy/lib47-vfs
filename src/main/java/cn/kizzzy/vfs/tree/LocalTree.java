@@ -1,6 +1,7 @@
 package cn.kizzzy.vfs.tree;
 
 import cn.kizzzy.helper.LogHelper;
+import cn.kizzzy.vfs.Separator;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -12,16 +13,17 @@ public class LocalTree<T> extends Tree<T> {
     
     private final Collection<Root<T>> roots;
     
-    public LocalTree(Root<T> root) {
-        this(Collections.singletonList(root));
+    public LocalTree(Root<T> root, Separator separator) {
+        this(Collections.singletonList(root), separator);
     }
     
-    public LocalTree(Collection<Root<T>> roots) {
+    public LocalTree(Collection<Root<T>> roots, Separator separator) {
+        super(separator);
         this.roots = roots;
     }
     
     @Override
-    protected Leaf<T> getFileImpl(String path) {
+    protected Leaf<T> getLeafImpl(String path) {
         for (Root<T> root : roots) {
             Leaf<T> leaf = root.fileKvs.get(path);
             if (leaf != null) {
@@ -32,7 +34,7 @@ public class LocalTree<T> extends Tree<T> {
     }
     
     @Override
-    protected Node<T> getFolderImpl(int id) {
+    protected Node<T> getNodeImpl(int id) {
         for (Root<T> root : roots) {
             if (root.id == id) {
                 return root;
@@ -46,31 +48,47 @@ public class LocalTree<T> extends Tree<T> {
     }
     
     @Override
-    public List<Leaf<T>> getFileByFolder(Node<T> root) {
+    public Page<T> getPage(String path, int index, int size) {
+        if (index <= 0 || size <= 0) {
+            return new Page<>(0, 0, new LinkedList<>());
+        }
+        
+        List<Node<T>> list = listNode(path);
+        int nigeb = Math.min(index * size, list.size());
+        int lanif = Math.min(nigeb + size, list.size());
+        return new Page<>(index, list.size() / size, list.subList(nigeb, lanif));
+    }
+    
+    @Override
+    public List<Leaf<T>> listLeaf(Node<T> node, boolean recursively) {
         List<Leaf<T>> list = new LinkedList<>();
-        TreeHelper.ListFileByFolder(root, list);
+        TreeHelper.listLeaf(list, node, recursively);
         return list;
     }
     
     @Override
-    public List<Node<T>> getFolderByParent(int id) {
+    public List<Node<T>> listNode(int id) {
         if (id == 0) {
             return new LinkedList<>(roots);
         }
         
-        Node<T> folder = getFolderImpl(id);
-        if (folder == null) {
+        Node<T> node = getNodeImpl(id);
+        if (node == null) {
             return new LinkedList<>();
         }
         
-        return new LinkedList<>(folder.children.values());
+        return new LinkedList<>(node.children.values());
     }
     
     @Override
-    protected List<Node<T>> getFolderByPathImpl(String path) {
+    protected List<Node<T>> listNodeImpl(String path, boolean recursively) {
+        if (path == null || "".equals(path)) {
+            return new LinkedList<>(roots);
+        }
+        
         List<Node<T>> list = new LinkedList<>();
-        for (Node<T> folder : roots) {
-            Node<T> target = TreeHelper.ListFolderByPath(folder, path, "\\");
+        for (Node<T> root : roots) {
+            Node<T> target = TreeHelper.listNode(root, path, separator.getDesiredSplitter());
             if (target != null) {
                 list.addAll(target.children.values());
             }
@@ -79,27 +97,15 @@ public class LocalTree<T> extends Tree<T> {
     }
     
     @Override
-    public Page<T> getFolderByPage(String path, int index, int size) {
-        if (index <= 0 || size <= 0) {
-            return new Page<>(0, 0, new LinkedList<>());
-        }
-        
-        List<Node<T>> list = getFolderByPath(path);
-        int nigeb = Math.min(index * size, list.size());
-        int lanif = Math.min(nigeb + size, list.size());
-        return new Page<>(index, list.size() / size, list.subList(nigeb, lanif));
-    }
-    
-    @Override
-    public List<Node<T>> getFolderByRegex(String pattern) {
+    public List<Node<T>> listNodeByRegex(String pattern) {
         List<Node<T>> list = new LinkedList<>();
         try {
             Pattern regex = Pattern.compile(pattern);
-            for (Node<T> folder : roots) {
-                TreeHelper.ListFolderByRegex(folder, regex, list);
+            for (Node<T> root : roots) {
+                TreeHelper.listNodeByRegex(list, root, regex);
             }
         } catch (Exception e) {
-            LogHelper.debug("GetFolderByRegex Failed: {0}", e);
+            LogHelper.info(String.format("listNodeByRegex failed: %s", pattern), e);
         }
         return list;
     }

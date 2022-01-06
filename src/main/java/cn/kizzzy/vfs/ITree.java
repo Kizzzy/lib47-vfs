@@ -12,17 +12,25 @@ public interface ITree<T> {
     
     boolean stop();
     
-    Leaf<T> getFile(String path);
+    Leaf<T> getLeaf(String path);
     
-    Node<T> getFolder(int id);
+    Node<T> getNode(int id);
     
-    List<Leaf<T>> getFileByFolder(Node<T> root);
+    Page<T> getPage(String path, int index, int size);
     
-    List<Node<T>> getFolderByParent(int id);
+    default List<Leaf<T>> listLeaf(Node<T> node) {
+        return listLeaf(node, false);
+    }
     
-    List<Node<T>> getFolderByRegex(String pattern);
+    List<Leaf<T>> listLeaf(Node<T> node, boolean recursively);
     
-    List<Node<T>> getFolderByPath(String path);
+    List<Node<T>> listNode(int id);
     
-    Page<T> getFolderByPage(String path, int index, int size);
+    default List<Node<T>> listNode(String path) {
+        return listNode(path, false);
+    }
+    
+    List<Node<T>> listNode(String path, boolean recursively);
+    
+    List<Node<T>> listNodeByRegex(String pattern);
 }

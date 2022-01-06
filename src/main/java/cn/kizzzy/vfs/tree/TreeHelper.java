@@ -5,38 +5,40 @@ import java.util.regex.Pattern;
 
 public class TreeHelper {
     
-    public static <T> void ListFileByFolder(Node<T> root, List<Leaf<T>> list) {
-        if (root.IsLeaf()) {
-            list.add(root.thumbs);
+    public static <T> void listLeaf(List<Leaf<T>> list, Node<T> node, boolean recursively) {
+        if (node.leaf) {
+            list.add((Leaf<T>) node);
+            return;
         }
-        for (Node<T> v : root.children.values()) {
-            if (v.IsLeaf()) {
-                list.add(v.thumbs);
-            } else {
-                ListFileByFolder(v, list);
+        
+        for (Node<T> child : node.children.values()) {
+            if (child.leaf) {
+                list.add((Leaf<T>) child);
+            } else if (recursively) {
+                listLeaf(list, child, true);
             }
         }
     }
     
-    public static <T> Node<T> ListFolderByPath(Node<T> parent, String path, String separator) {
-        String[] paths = path.split(separator);
-        for (String v : paths) {
-            Node<T> child = parent.children.get(v);
+    public static <T> Node<T> listNode(Node<T> target, String path, String separator) {
+        String[] names = path.split(separator);
+        for (String name : names) {
+            Node<T> child = target.children.get(name);
             if (child == null) {
                 return null;
             }
-            parent = child;
+            target = child;
         }
-        return parent;
+        return target;
     }
     
-    public static <T> void ListFolderByRegex(Node<T> folder, Pattern regex, List<Node<T>> list) {
-        if (regex.matcher(folder.name).find()) {
-            list.add(folder);
+    public static <T> void listNodeByRegex(List<Node<T>> list, Node<T> node, Pattern regex) {
+        if (regex.matcher(node.name).find()) {
+            list.add(node);
         }
         
-        for (Node<T> child : folder.children.values()) {
-            ListFolderByRegex(child, regex, list);
+        for (Node<T> child : node.children.values()) {
+            listNodeByRegex(list, child, regex);
         }
     }
 }

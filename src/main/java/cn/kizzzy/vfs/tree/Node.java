@@ -5,49 +5,26 @@ import java.util.Map;
 
 public class Node<T> {
     
-    public int id;
+    public final int id;
     
-    private int type;
+    public final boolean leaf;
     
-    private boolean leaf;
+    public final String name;
     
-    public String name;
-    
-    public Node<T> parent;
-    
-    public Leaf<T> thumbs;
-    
-    public Map<String, Node<T>> children
+    public final Map<String, Node<T>> children
         = new HashMap<>();
     
-    public Node(String name) {
-        this(name, 0, 1, false, null, null);
-        id = hashCode();
+    public Node(int id, String name) {
+        this(id, name, false);
     }
     
-    public Node(String name, Node<T> parent, Leaf<T> thumbs) {
-        this(name, 0, 1, false, parent, thumbs);
-        id = hashCode();
-    }
-    
-    public Node(String name, int id, boolean leaf) {
-        this(name, id, 2, leaf, null, null);
-    }
-    
-    public Node(String name, int id, boolean leaf, Node<T> parent, Leaf<T> thumbs) {
-        this(name, id, 2, leaf, parent, thumbs);
-    }
-    
-    public Node(String name, int id, int type, boolean leaf, Node<T> parent, Leaf<T> thumbs) {
-        this.name = name;
+    public Node(int id, String name, boolean leaf) {
         this.id = id;
-        this.type = type;
         this.leaf = leaf;
-        this.parent = parent;
-        this.thumbs = thumbs;
+        this.name = name;
     }
     
-    public boolean IsLeaf() {
-        return type == 1 ? children.isEmpty() : leaf;
+    public boolean accept(String name) {
+        return this.name.equals(name);
     }
 }
