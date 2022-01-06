@@ -48,8 +48,8 @@ public abstract class CacheTree<T> implements ITree<T> {
     }
     
     @Override
-    public List<Leaf<T>> listLeaf(Node<T> node) {
-        return tree.listLeaf(node);
+    public List<Leaf<T>> listLeaf(Node<T> node, boolean recursively) {
+        return tree.listLeaf(node, recursively);
     }
     
     @Override
