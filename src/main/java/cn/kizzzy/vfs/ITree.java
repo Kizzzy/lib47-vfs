@@ -24,7 +24,11 @@ public interface ITree<T> {
     
     List<Leaf<T>> listLeaf(Node<T> node, boolean recursively);
     
-    List<Node<T>> listNode(int id);
+    default List<Node<T>> listNode(int id) {
+        return listNode(id, false);
+    }
+    
+    List<Node<T>> listNode(int id, boolean recursively);
     
     default List<Node<T>> listNode(String path) {
         return listNode(path, false);

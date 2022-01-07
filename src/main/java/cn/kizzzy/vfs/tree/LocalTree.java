@@ -67,7 +67,7 @@ public class LocalTree<T> extends Tree<T> {
     }
     
     @Override
-    public List<Node<T>> listNode(int id) {
+    public List<Node<T>> listNode(int id, boolean recursively) {
         if (id == 0) {
             return new LinkedList<>(roots);
         }
@@ -81,7 +81,7 @@ public class LocalTree<T> extends Tree<T> {
     }
     
     @Override
-    protected List<Node<T>> listNodeImpl(String path, boolean recursively) {
+    public List<Node<T>> listNode(String path, boolean recursively) {
         if (path == null || "".equals(path)) {
             return new LinkedList<>(roots);
         }

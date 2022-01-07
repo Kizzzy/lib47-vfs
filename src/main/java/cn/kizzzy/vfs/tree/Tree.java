@@ -3,7 +3,6 @@ package cn.kizzzy.vfs.tree;
 import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.Separator;
 
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,9 +14,6 @@ public abstract class Tree<T> implements ITree<T> {
         new ConcurrentHashMap<>();
     
     protected Map<Integer, Node<T>> folderKvs =
-        new ConcurrentHashMap<>();
-    
-    protected Map<String, List<Node<T>>> pathKvs =
         new ConcurrentHashMap<>();
     
     protected Tree(Separator separator) {
@@ -66,22 +62,4 @@ public abstract class Tree<T> implements ITree<T> {
     }
     
     protected abstract Node<T> getNodeImpl(int id);
-    
-    public List<Node<T>> listNode(String path, boolean recursively) {
-        path = separator.replace(path);
-        
-        List<Node<T>> list = pathKvs.get(path);
-        if (list != null) {
-            return list;
-        }
-        
-        list = listNodeImpl(path, recursively);
-        if (list != null) {
-            pathKvs.put(path, list);
-        }
-        
-        return list;
-    }
-    
-    protected abstract List<Node<T>> listNodeImpl(String path, boolean recursively);
 }
