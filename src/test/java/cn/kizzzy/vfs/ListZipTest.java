@@ -1,9 +1,6 @@
 package cn.kizzzy.vfs;
 
-import cn.kizzzy.vfs.pack.FilePackage;
-import cn.kizzzy.vfs.pack.ZipPackage;
 import cn.kizzzy.vfs.tree.IdGenerator;
-import cn.kizzzy.vfs.tree.LocalTree;
 import cn.kizzzy.vfs.tree.Node;
 import cn.kizzzy.vfs.tree.NodeComparator;
 import cn.kizzzy.vfs.tree.ZipTreeBuilder;
@@ -14,12 +11,6 @@ public class ListZipTest {
     
     public static void main(String[] args) throws Exception {
         String zipFile = "D:\\Temp.zip";
-        
-        ITree<Void> tree = new LocalTree<>(
-            new ZipTreeBuilder<Void>(zipFile, new IdGenerator()).build(),
-            Separator.SLASH_SEPARATOR_LOWERCASE
-        );
-    
         String[] paths = new String[]{
             "",
             "dll-dev",
@@ -27,6 +18,9 @@ public class ListZipTest {
             "dll-dev/xc",
             "dll-dev/xc/Game-001.dll",
         };
+        
+        ITree<Void> tree = new ZipTreeBuilder<Void>(zipFile, new IdGenerator()).build();
+        
         for (String path : paths) {
             listNodeImpl(tree, path);
         }

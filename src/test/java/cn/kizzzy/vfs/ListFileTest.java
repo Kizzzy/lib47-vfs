@@ -2,7 +2,6 @@ package cn.kizzzy.vfs;
 
 import cn.kizzzy.vfs.tree.FileTreeBuilder;
 import cn.kizzzy.vfs.tree.IdGenerator;
-import cn.kizzzy.vfs.tree.LocalTree;
 import cn.kizzzy.vfs.tree.Node;
 import cn.kizzzy.vfs.tree.NodeComparator;
 
@@ -12,12 +11,6 @@ public class ListFileTest {
     
     public static void main(String[] args) throws Exception {
         String folder = "D:\\Temp";
-        
-        ITree<Void> tree = new LocalTree<>(
-            new FileTreeBuilder<Void>(folder, new IdGenerator()).build(),
-            Separator.BACKSLASH_SEPARATOR_LOWERCASE
-        );
-        
         String[] paths = new String[]{
             "",
             "dll-dev",
@@ -25,6 +18,9 @@ public class ListFileTest {
             "dll-dev/xc",
             "dll-dev/xc/Game-001.dll",
         };
+        
+        ITree<Void> tree = new FileTreeBuilder<Void>(folder, new IdGenerator()).build();
+        
         for (String path : paths) {
             listNodeImpl(tree, path);
         }

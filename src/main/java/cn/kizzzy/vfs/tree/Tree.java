@@ -1,22 +1,21 @@
 package cn.kizzzy.vfs.tree;
 
+import cn.kizzzy.helper.LogHelper;
 import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.Separator;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Pattern;
 
-public abstract class Tree<T> implements ITree<T> {
+public class Tree<T> implements ITree<T> {
+    
+    protected Root<T> root;
     
     protected final Separator separator;
     
-    protected Map<String, Leaf<T>> fileKvs =
-        new ConcurrentHashMap<>();
-    
-    protected Map<Integer, Node<T>> folderKvs =
-        new ConcurrentHashMap<>();
-    
-    protected Tree(Separator separator) {
+    protected Tree(Root<T> root, Separator separator) {
+        this.root = root;
         this.separator = separator;
     }
     
@@ -32,34 +31,69 @@ public abstract class Tree<T> implements ITree<T> {
     
     public Leaf<T> getLeaf(String path) {
         path = separator.replace(path);
-        
-        Leaf<T> leaf = fileKvs.get(path);
-        if (leaf != null) {
-            return leaf;
-        }
-        
-        leaf = getLeafImpl(path);
-        if (leaf != null) {
-            fileKvs.put(path, leaf);
-        }
-        return leaf;
+        return root.fileKvs.get(path);
     }
-    
-    protected abstract Leaf<T> getLeafImpl(String path);
     
     public Node<T> getNode(int id) {
-        Node<T> node = folderKvs.get(id);
-        if (node != null) {
-            return node;
-        }
-        
-        node = getNodeImpl(id);
-        if (node != null) {
-            folderKvs.put(id, node);
-        }
-        
-        return node;
+        return root.folderKvs.get(id);
     }
     
-    protected abstract Node<T> getNodeImpl(int id);
+    @Override
+    public Page<T> getPage(String path, int index, int size) {
+        if (index <= 0 || size <= 0) {
+            return new Page<>(0, 0, new LinkedList<>());
+        }
+        
+        List<Node<T>> list = listNode(path);
+        int nigeb = Math.min(index * size, list.size());
+        int lanif = Math.min(nigeb + size, list.size());
+        return new Page<>(index, list.size() / size, list.subList(nigeb, lanif));
+    }
+    
+    @Override
+    public List<Leaf<T>> listLeaf(Node<T> node, boolean recursively) {
+        List<Leaf<T>> list = new LinkedList<>();
+        TreeHelper.listLeaf(list, node, recursively);
+        return list;
+    }
+    
+    @Override
+    public List<Node<T>> listNode(int id, boolean recursively) {
+        List<Node<T>> nodes = new LinkedList<>();
+        if (id == 0) {
+            nodes.add(root);
+        } else {
+            Node<T> node = getNode(id);
+            if (node != null) {
+                nodes.addAll(node.children.values());
+            }
+        }
+        return nodes;
+    }
+    
+    @Override
+    public List<Node<T>> listNode(String path, boolean recursively) {
+        List<Node<T>> nodes = new LinkedList<>();
+        if (path == null || "".equals(path)) {
+            nodes.add(root);
+        } else {
+            Node<T> target = TreeHelper.listNode(root, path, separator.getDesiredSplitter());
+            if (target != null) {
+                nodes.addAll(target.children.values());
+            }
+        }
+        return nodes;
+    }
+    
+    @Override
+    public List<Node<T>> listNodeByRegex(String regex) {
+        List<Node<T>> list = new LinkedList<>();
+        try {
+            Pattern pattern = Pattern.compile(regex);
+            TreeHelper.listNodeByRegex(list, root, pattern);
+        } catch (Exception e) {
+            LogHelper.info(String.format("listNodeByRegex failed: %s", regex), e);
+        }
+        return list;
+    }
 }

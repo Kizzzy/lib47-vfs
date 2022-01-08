@@ -47,6 +47,12 @@ public class Separator {
         return replace(origin).split(desiredSplitter);
     }
     
+    public String combine(String parent, String child) {
+        parent = replace(parent);
+        child = replace(child);
+        return String.format("%s%s%s", parent, desired, child);
+    }
+    
     public char getUndesired() {
         return undesired;
     }

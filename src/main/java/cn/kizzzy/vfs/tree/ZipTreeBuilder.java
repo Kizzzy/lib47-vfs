@@ -1,6 +1,7 @@
 package cn.kizzzy.vfs.tree;
 
 import cn.kizzzy.helper.LogHelper;
+import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.Separator;
 
 import java.util.Enumeration;
@@ -17,7 +18,7 @@ public class ZipTreeBuilder<T> extends TreeBuilder<T> {
     }
     
     @Override
-    public Root<T> build() {
+    public ITree<T> build() {
         try {
             try (ZipFile zipFile = new ZipFile(this.zipFile)) {
                 Root<T> root = new Root<>(idGenerator.getId(), zipFile.getName());
@@ -25,7 +26,7 @@ public class ZipTreeBuilder<T> extends TreeBuilder<T> {
                 for (Enumeration<? extends ZipEntry> e = zipFile.entries(); e.hasMoreElements(); ) {
                     listImpl(root, root, e.nextElement());
                 }
-                return root;
+                return new Tree<>(root, separator);
             }
         } catch (Exception e) {
             LogHelper.error("build zip tree failed", e);

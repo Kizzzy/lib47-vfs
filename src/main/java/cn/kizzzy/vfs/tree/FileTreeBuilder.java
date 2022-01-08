@@ -1,5 +1,6 @@
 package cn.kizzzy.vfs.tree;
 
+import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.Separator;
 
 import java.io.File;
@@ -14,11 +15,11 @@ public class FileTreeBuilder<T> extends TreeBuilder<T> {
     }
     
     @Override
-    public Root<T> build() {
+    public ITree<T> build() {
         File file = new File(rootPath);
         Root<T> root = new Root<>(idGenerator.getId(), file.getName());
         listImpl(root, root, file, true);
-        return root;
+        return new Tree<>(root, separator);
     }
     
     protected void listImpl(Root<T> root, Node<T> parent, File file, boolean isRoot) {
@@ -39,7 +40,7 @@ public class FileTreeBuilder<T> extends TreeBuilder<T> {
             root.folderKvs.put(parent.id, parent);
         } else {
             String path = file.getAbsolutePath().toLowerCase();
-            path = path.replace(String.format("%s%s", rootPath, "\\"), "");
+            path = path.replace(String.format("%s%s", rootPath, separator.getDesired()), "");
             
             Leaf<T> leaf = new Leaf<>(idGenerator.getId(), file.getName(), root.name, path, create(file));
             parent.children.put(leaf.name, leaf);
