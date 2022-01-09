@@ -1,23 +1,20 @@
 package cn.kizzzy.vfs.handler;
 
 import cn.kizzzy.io.DataOutputStreamEx;
-import cn.kizzzy.io.SubStream;
 import cn.kizzzy.vfs.IFileHandler;
 import cn.kizzzy.vfs.IPackage;
+import cn.kizzzy.io.FullyReader;
 
-import java.io.InputStream;
 import java.io.OutputStream;
 
 public abstract class StreamFileHandler<T> implements IFileHandler<T> {
     
     @Override
-    public T load(IPackage pack, String path, InputStream stream, long size) throws Exception {
-        try (SubStream subStream = new SubStream(stream, 0, size)) {
-            return loadImpl(pack, path, subStream);
-        }
+    public T load(IPackage pack, String path, FullyReader reader, long size) throws Exception {
+        return loadImpl(pack, path, reader);
     }
     
-    protected abstract T loadImpl(IPackage pack, String path, SubStream reader) throws Exception;
+    protected abstract T loadImpl(IPackage pack, String path, FullyReader reader) throws Exception;
     
     @Override
     public boolean save(IPackage pack, String path, OutputStream stream, T data) throws Exception {

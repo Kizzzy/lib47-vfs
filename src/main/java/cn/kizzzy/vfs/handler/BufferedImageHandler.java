@@ -2,10 +2,10 @@ package cn.kizzzy.vfs.handler;
 
 import cn.kizzzy.vfs.IFileHandler;
 import cn.kizzzy.vfs.IPackage;
+import cn.kizzzy.io.FullyReader;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 public class BufferedImageHandler implements IFileHandler<BufferedImage> {
@@ -21,7 +21,7 @@ public class BufferedImageHandler implements IFileHandler<BufferedImage> {
     }
     
     @Override
-    public BufferedImage load(IPackage iPackage, String s, InputStream inputStream, long l) throws Exception {
+    public BufferedImage load(IPackage iPackage, String s, FullyReader inputStream, long l) throws Exception {
         return ImageIO.read(inputStream);
     }
     

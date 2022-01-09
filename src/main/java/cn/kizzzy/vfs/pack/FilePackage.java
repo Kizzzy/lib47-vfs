@@ -6,9 +6,9 @@ import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
 import cn.kizzzy.vfs.IStrategy;
 import cn.kizzzy.vfs.IStreamable;
+import cn.kizzzy.io.FullyReader;
 import cn.kizzzy.vfs.streamable.FileStreamable;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,10 +32,11 @@ public class FilePackage extends PackageAdapter {
     @Override
     protected Object loadImpl(String path, IFileLoader<?> loader) throws Exception {
         Path fullPath = Paths.get(root, path);
-        try (FileInputStream fis = new FileInputStream(fullPath.toFile())) {
-            Object obj = loader.load(this, path, fis, fis.available());
+        FileStreamable streamable = new FileStreamable(fullPath.toString());
+        try (FullyReader stream = streamable.OpenStream()) {
+            Object obj = loader.load(this, path, stream, stream.length());
             if (obj instanceof IStreamable) {
-                ((IStreamable) obj).setSource(new FileStreamable(fullPath.toString()));
+                ((IStreamable) obj).setSource(streamable);
             }
             return obj;
         }

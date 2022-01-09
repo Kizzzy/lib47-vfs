@@ -2,14 +2,14 @@ package cn.kizzzy.vfs.handler;
 
 import cn.kizzzy.vfs.IFileHandler;
 import cn.kizzzy.vfs.IPackage;
+import cn.kizzzy.io.FullyReader;
 
-import java.io.InputStream;
 import java.io.OutputStream;
 
 public abstract class BinaryFileHandler<T> implements IFileHandler<T> {
     
     @Override
-    public T load(IPackage pack, String path, InputStream stream, long size) throws Exception {
+    public T load(IPackage pack, String path, FullyReader stream, long size) throws Exception {
         byte[] buffer = new byte[(int) size];
         stream.read(buffer);
         return loadImpl(buffer);

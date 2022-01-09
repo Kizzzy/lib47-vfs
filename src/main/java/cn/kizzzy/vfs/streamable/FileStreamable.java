@@ -1,19 +1,19 @@
 package cn.kizzzy.vfs.streamable;
 
 import cn.kizzzy.vfs.IStreamable;
-import cn.kizzzy.io.SubStream;
+import cn.kizzzy.io.FullyReader;
+import cn.kizzzy.io.RandomAccessFileReader;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.RandomAccessFile;
 
 public class FileStreamable implements IStreamable {
     
-    private final String fullPath;
+    private final String file;
     
     private IStreamable source;
     
-    public FileStreamable(String fullPath) {
-        this.fullPath = fullPath;
+    public FileStreamable(String file) {
+        this.file = file;
     }
     
     @Override
@@ -26,8 +26,7 @@ public class FileStreamable implements IStreamable {
         this.source = source;
     }
     
-    public InputStream OpenStream() throws Exception {
-        FileInputStream fis = new FileInputStream(fullPath);
-        return new SubStream(fis, 0, fis.available());
+    public FullyReader OpenStream() throws Exception {
+        return new RandomAccessFileReader(new RandomAccessFile(file, "r"));
     }
 }

@@ -1,8 +1,7 @@
 package cn.kizzzy.vfs;
 
-import cn.kizzzy.io.SubStream;
-
-import java.io.InputStream;
+import cn.kizzzy.io.FullyReader;
+import cn.kizzzy.io.SliceFullReader;
 
 public interface IStreamable {
     
@@ -10,11 +9,10 @@ public interface IStreamable {
     
     void setSource(IStreamable source);
     
-    default InputStream OpenStream() throws Exception {
+    default FullyReader OpenStream() throws Exception {
         if (getSource() == null) {
             throw new NullPointerException("source is null");
         }
-        InputStream temp = getSource().OpenStream();
-        return new SubStream(temp, 0, temp.available());
+        return new SliceFullReader(getSource().OpenStream());
     }
 }

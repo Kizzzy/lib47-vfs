@@ -35,6 +35,9 @@ public class Tree<T> implements ITree<T> {
     }
     
     public Node<T> getNode(int id) {
+        if (id == root.id) {
+            return root;
+        }
         return root.folderKvs.get(id);
     }
     
@@ -73,6 +76,8 @@ public class Tree<T> implements ITree<T> {
     
     @Override
     public List<Node<T>> listNode(String path, boolean recursively) {
+        path = separator.replace(path);
+        
         List<Node<T>> nodes = new LinkedList<>();
         if (path == null || "".equals(path)) {
             nodes.add(root);
