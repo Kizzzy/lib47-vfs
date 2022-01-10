@@ -67,10 +67,10 @@ public class Forest<T> implements ITree<T> {
     }
     
     @Override
-    public List<Leaf<T>> listLeaf(Node<T> node, boolean recursively) {
+    public List<Leaf<T>> listLeaf(int id, boolean recursively) {
         List<Leaf<T>> list = new LinkedList<>();
         for (ITree<T> tree : trees) {
-            list.addAll(tree.listLeaf(node, recursively));
+            list.addAll(tree.listLeaf(id, recursively));
         }
         return list;
     }

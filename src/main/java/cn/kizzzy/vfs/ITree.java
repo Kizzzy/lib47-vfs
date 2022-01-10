@@ -18,11 +18,19 @@ public interface ITree<T> {
     
     Page<T> getPage(String path, int index, int size);
     
+    default List<Leaf<T>> listLeaf(int id) {
+        return listLeaf(id, false);
+    }
+    
+    List<Leaf<T>> listLeaf(int id, boolean recursively);
+    
     default List<Leaf<T>> listLeaf(Node<T> node) {
         return listLeaf(node, false);
     }
     
-    List<Leaf<T>> listLeaf(Node<T> node, boolean recursively);
+    default List<Leaf<T>> listLeaf(Node<T> node, boolean recursively) {
+        return listLeaf(node.id, recursively);
+    }
     
     default List<Node<T>> listNode(int id) {
         return listNode(id, false);

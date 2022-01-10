@@ -54,9 +54,12 @@ public class Tree<T> implements ITree<T> {
     }
     
     @Override
-    public List<Leaf<T>> listLeaf(Node<T> node, boolean recursively) {
+    public List<Leaf<T>> listLeaf(int id, boolean recursively) {
         List<Leaf<T>> list = new LinkedList<>();
-        TreeHelper.listLeaf(list, node, recursively);
+        Node<T> node = getNode(id);
+        if (node != null) {
+            TreeHelper.listLeaf(list, node, recursively);
+        }
         return list;
     }
     
