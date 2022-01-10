@@ -25,7 +25,7 @@ public class FileTreeBuilder<T> extends TreeBuilder<T> {
     protected void listImpl(Root<T> root, Node<T> parent, File file, boolean isRoot) {
         if (file.isDirectory()) {
             if (!isRoot) {
-                Node<T> temp = new Node<>(idGenerator.getId(), file.getName());
+                Node<T> temp = new Node<>(idGenerator.getId(), separator.replace(file.getName()));
                 parent.children.put(temp.name, temp);
                 parent = temp;
             }
@@ -39,10 +39,10 @@ public class FileTreeBuilder<T> extends TreeBuilder<T> {
             
             root.folderKvs.put(parent.id, parent);
         } else {
-            String path = file.getAbsolutePath().toLowerCase();
+            String path = separator.replace(file.getAbsolutePath());
             path = path.replace(String.format("%s%s", rootPath, separator.getDesired()), "");
             
-            Leaf<T> leaf = new Leaf<>(idGenerator.getId(), file.getName(), root.name, path, create(file));
+            Leaf<T> leaf = new Leaf<>(idGenerator.getId(), separator.replace(file.getName()), root.name, path, create(file));
             parent.children.put(leaf.name, leaf);
             
             root.fileKvs.put(leaf.path, leaf);
