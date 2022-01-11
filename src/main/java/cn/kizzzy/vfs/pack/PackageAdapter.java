@@ -5,11 +5,11 @@ import cn.kizzzy.vfs.IFileHandler;
 import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
 import cn.kizzzy.vfs.IPackage;
-import cn.kizzzy.vfs.IStrategy;
+import cn.kizzzy.vfs.Separator;
 import cn.kizzzy.vfs.handler.BytesFileHandler;
 import cn.kizzzy.vfs.handler.StringFileHandler;
-import cn.kizzzy.vfs.strategy.NopStrategy;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,26 +17,16 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public abstract class PackageAdapter implements IPackage {
     
-    private static final char SLASH = '/';
-    
-    private static final char BACKSLASH = '\\';
-    
-    protected final char undesired;
-    
-    protected final char separator;
+    protected static final Separator FILE_SEPARATOR
+        = new Separator(File.separatorChar, false);
     
     protected final String root;
-    
-    protected final IStrategy<String, Object> strategy;
     
     protected final Map<Type, IFileHandler<?>> handlerKvs
         = new HashMap<>();
     
-    public PackageAdapter(String root, char separator, IStrategy<String, Object> strategy) {
-        this.separator = separator;
-        this.undesired = SLASH == separator ? BACKSLASH : SLASH;
-        this.root = root.replace(undesired, separator);
-        this.strategy = strategy != null ? strategy : new NopStrategy<>();
+    public PackageAdapter(String root) {
+        this.root = root;
         
         initDefaultHandler();
     }
@@ -67,20 +57,14 @@ public abstract class PackageAdapter implements IPackage {
     
     @Override
     public Object load(String path, IFileLoader<?> loader) {
-        Object value = null;
         try {
-            value = strategy.TryGet(path);
-            if (value != null) {
-                return value;
-            }
             if (exist(path)) {
-                value = loadImpl(path, loader);
+                return loadImpl(path, loader);
             }
-            strategy.Set(path, value);
         } catch (Exception e) {
-            LogHelper.error(null, e);
+            LogHelper.error(String.format("load error: %s", path), e);
         }
-        return value;
+        return null;
     }
     
     protected abstract Object loadImpl(String path, IFileLoader<?> loader) throws Exception;
@@ -99,7 +83,7 @@ public abstract class PackageAdapter implements IPackage {
         try {
             return saveImpl(path, data, saver);
         } catch (Exception e) {
-            LogHelper.error(null, e);
+            LogHelper.error(String.format("save error: %s", path), e);
         }
         return false;
     }

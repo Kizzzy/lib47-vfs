@@ -10,14 +10,14 @@ public class FileTreeBuilder<T> extends TreeBuilder<T> {
     protected final String rootPath;
     
     public FileTreeBuilder(String rootPath, IdGenerator idGenerator) {
-        super(Separator.BACKSLASH_SEPARATOR_LOWERCASE, idGenerator);
+        super(new Separator(File.separatorChar, false), idGenerator);
         this.rootPath = separator.replace(rootPath);
     }
     
     @Override
     public ITree<T> build() {
         File file = new File(rootPath);
-        Root<T> root = new Root<>(idGenerator.getId(), file.getName());
+        Root<T> root = new Root<>(idGenerator.getId(), separator.replace(file.getName()));
         listImpl(root, root, file, true);
         return new Tree<>(root, separator);
     }
@@ -45,6 +45,7 @@ public class FileTreeBuilder<T> extends TreeBuilder<T> {
             Leaf<T> leaf = new Leaf<>(idGenerator.getId(), separator.replace(file.getName()), root.name, path, create(file));
             parent.children.put(leaf.name, leaf);
             
+            root.folderKvs.put(leaf.id, leaf);
             root.fileKvs.put(leaf.path, leaf);
         }
     }

@@ -10,13 +10,13 @@ public class Separator {
     
     public static final String BACKSLASH_SPLITTER = "\\\\";
     
-    public static final Separator SLASH_SEPARATOR_UPPERCASE
+    public static final Separator SLASH_SEPARATOR
         = new Separator(SLASH, false);
     
     public static final Separator SLASH_SEPARATOR_LOWERCASE
         = new Separator(SLASH, true);
     
-    public static final Separator BACKSLASH_SEPARATOR_UPPERCASE
+    public static final Separator BACKSLASH_SEPARATOR
         = new Separator(BACKSLASH, false);
     
     public static final Separator BACKSLASH_SEPARATOR_LOWERCASE
@@ -48,9 +48,7 @@ public class Separator {
     }
     
     public String combine(String parent, String child) {
-        parent = replace(parent);
-        child = replace(child);
-        return String.format("%s%s%s", parent, desired, child);
+        return String.format("%s%s%s", replace(parent), desired, replace(child));
     }
     
     public char getUndesired() {

@@ -1,38 +1,31 @@
 package cn.kizzzy.vfs.pack;
 
 import cn.kizzzy.helper.FileHelper;
-import cn.kizzzy.helper.LogHelper;
+import cn.kizzzy.io.FullyReader;
 import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
-import cn.kizzzy.vfs.IStrategy;
 import cn.kizzzy.vfs.IStreamable;
-import cn.kizzzy.io.FullyReader;
 import cn.kizzzy.vfs.streamable.FileStreamable;
 
+import java.io.File;
 import java.io.FileOutputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class FilePackage extends PackageAdapter {
     
     public FilePackage(String root) {
-        this(root, null);
-    }
-    
-    public FilePackage(String root, IStrategy<String, Object> strategy) {
-        super(root, '\\', strategy);
+        super(root);
     }
     
     @Override
     public boolean exist(String path) {
-        Path fullPath = Paths.get(root, path);
-        return fullPath.toFile().exists();
+        path = FILE_SEPARATOR.combine(root, path);
+        return new File(path).exists();
     }
     
     @Override
     protected Object loadImpl(String path, IFileLoader<?> loader) throws Exception {
-        Path fullPath = Paths.get(root, path);
-        FileStreamable streamable = new FileStreamable(fullPath.toString());
+        String fullPath = FILE_SEPARATOR.combine(root, path);
+        FileStreamable streamable = new FileStreamable(fullPath);
         try (FullyReader stream = streamable.OpenStream()) {
             Object obj = loader.load(this, path, stream, stream.length());
             if (obj instanceof IStreamable) {
@@ -44,14 +37,13 @@ public class FilePackage extends PackageAdapter {
     
     @Override
     protected <T> boolean saveImpl(String path, T data, IFileSaver<T> saver) throws Exception {
-        Path fullPath = Paths.get(root, path);
-        if (FileHelper.createFolderIfAbsent(fullPath.getParent().toFile())) {
-            try (FileOutputStream fos = new FileOutputStream(fullPath.toFile())) {
-                return saver.save(this, path, fos, data);
-            }
-        } else {
-            LogHelper.error("Save Data Failed: Create Folder Failed");
-            return false;
+        String fullPath = FILE_SEPARATOR.combine(root, path);
+        if (!FileHelper.createFolderIfAbsent(new File(fullPath).getParent())) {
+            throw new RuntimeException("create folder failed: " + fullPath);
+        }
+        
+        try (FileOutputStream fos = new FileOutputStream(fullPath)) {
+            return saver.save(this, path, fos, data);
         }
     }
 }
