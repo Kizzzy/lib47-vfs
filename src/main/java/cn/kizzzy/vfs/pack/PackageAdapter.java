@@ -26,7 +26,7 @@ public abstract class PackageAdapter implements IPackage {
         = new HashMap<>();
     
     public PackageAdapter(String root) {
-        this.root = root;
+        this.root = FILE_SEPARATOR.replace(root);
         
         initDefaultHandler();
     }

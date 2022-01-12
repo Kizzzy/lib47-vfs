@@ -12,8 +12,12 @@ public class ZipTreeBuilder<T> extends TreeBuilder<T> {
     
     protected final String zipFile;
     
+    public ZipTreeBuilder(String zipFile) {
+        this(zipFile, new IdGenerator());
+    }
+    
     public ZipTreeBuilder(String zipFile, IdGenerator idGenerator) {
-        super(Separator.SLASH_SEPARATOR_LOWERCASE, idGenerator);
+        super(new Separator(Separator.SLASH, false), idGenerator);
         this.zipFile = zipFile;
     }
     
@@ -29,7 +33,7 @@ public class ZipTreeBuilder<T> extends TreeBuilder<T> {
                 return new Tree<>(root, separator);
             }
         } catch (Exception e) {
-            LogHelper.error("build zip tree failed", e);
+            LogHelper.error(String.format("build zip tree failed: %s", zipFile), e);
             return null;
         }
     }

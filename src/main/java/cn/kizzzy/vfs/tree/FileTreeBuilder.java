@@ -9,6 +9,10 @@ public class FileTreeBuilder<T> extends TreeBuilder<T> {
     
     protected final String rootPath;
     
+    public FileTreeBuilder(String rootPath) {
+        this(rootPath, new IdGenerator());
+    }
+    
     public FileTreeBuilder(String rootPath, IdGenerator idGenerator) {
         super(new Separator(File.separatorChar, false), idGenerator);
         this.rootPath = separator.replace(rootPath);
