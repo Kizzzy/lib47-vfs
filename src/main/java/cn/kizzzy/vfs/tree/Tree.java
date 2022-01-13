@@ -66,9 +66,13 @@ public class Tree<T> implements ITree<T> {
     @Override
     public List<Node<T>> listNode(int id, boolean recursively) {
         List<Node<T>> nodes = new LinkedList<>();
-        Node<T> node = getNode(id);
-        if (node != null) {
-            nodes.addAll(node.children.values());
+        if (id == 0) {
+            nodes.add(root);
+        } else {
+            Node<T> node = getNode(id);
+            if (node != null) {
+                nodes.addAll(node.children.values());
+            }
         }
         return nodes;
     }
