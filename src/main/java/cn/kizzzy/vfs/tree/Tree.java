@@ -8,13 +8,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class Tree<T> implements ITree<T> {
+public class Tree implements ITree {
     
-    protected Root<T> root;
+    protected Root root;
     
     protected final Separator separator;
     
-    protected Tree(Root<T> root, Separator separator) {
+    protected Tree(Root root, Separator separator) {
         this.root = root;
         this.separator = separator;
     }
@@ -29,12 +29,12 @@ public class Tree<T> implements ITree<T> {
         return true;
     }
     
-    public Leaf<T> getLeaf(String path) {
+    public Leaf getLeaf(String path) {
         path = separator.replace(path);
         return root.fileKvs.get(path);
     }
     
-    public Node<T> getNode(int id) {
+    public Node getNode(int id) {
         if (id == root.id || id == 0) {
             return root;
         }
@@ -42,21 +42,21 @@ public class Tree<T> implements ITree<T> {
     }
     
     @Override
-    public Page<T> getPage(String path, int index, int size) {
+    public Page getPage(String path, int index, int size) {
         if (index <= 0 || size <= 0) {
-            return new Page<>(0, 0, new LinkedList<>());
+            return new Page(0, 0, new LinkedList<>());
         }
         
-        List<Node<T>> list = listNode(path);
+        List<Node> list = listNode(path);
         int nigeb = Math.min(index * size, list.size());
         int lanif = Math.min(nigeb + size, list.size());
-        return new Page<>(index, list.size() / size, list.subList(nigeb, lanif));
+        return new Page(index, list.size() / size, list.subList(nigeb, lanif));
     }
     
     @Override
-    public List<Leaf<T>> listLeaf(int id, boolean recursively) {
-        List<Leaf<T>> list = new LinkedList<>();
-        Node<T> node = getNode(id);
+    public List<Leaf> listLeaf(int id, boolean recursively) {
+        List<Leaf> list = new LinkedList<>();
+        Node node = getNode(id);
         if (node != null) {
             TreeHelper.listLeaf(list, node, recursively);
         }
@@ -64,12 +64,12 @@ public class Tree<T> implements ITree<T> {
     }
     
     @Override
-    public List<Node<T>> listNode(int id, boolean recursively) {
-        List<Node<T>> nodes = new LinkedList<>();
+    public List<Node> listNode(int id, boolean recursively) {
+        List<Node> nodes = new LinkedList<>();
         if (id == 0) {
             nodes.add(root);
         } else {
-            Node<T> node = getNode(id);
+            Node node = getNode(id);
             if (node != null) {
                 nodes.addAll(node.children.values());
             }
@@ -78,14 +78,14 @@ public class Tree<T> implements ITree<T> {
     }
     
     @Override
-    public List<Node<T>> listNode(String path, boolean recursively) {
+    public List<Node> listNode(String path, boolean recursively) {
         path = separator.replace(path);
         
-        List<Node<T>> nodes = new LinkedList<>();
+        List<Node> nodes = new LinkedList<>();
         if (path == null || "".equals(path)) {
             nodes.add(root);
         } else {
-            Node<T> target = TreeHelper.listNode(root, path, separator.getDesiredSplitter());
+            Node target = TreeHelper.listNode(root, path, separator.getDesiredSplitter());
             if (target != null) {
                 nodes.addAll(target.children.values());
             }
@@ -94,8 +94,8 @@ public class Tree<T> implements ITree<T> {
     }
     
     @Override
-    public List<Node<T>> listNodeByRegex(String regex) {
-        List<Node<T>> list = new LinkedList<>();
+    public List<Node> listNodeByRegex(String regex) {
+        List<Node> list = new LinkedList<>();
         try {
             Pattern pattern = Pattern.compile(regex);
             TreeHelper.listNodeByRegex(list, root, pattern);

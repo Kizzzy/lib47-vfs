@@ -5,7 +5,7 @@ import cn.kizzzy.vfs.Separator;
 
 import java.io.File;
 
-public class FileTreeBuilder<T> extends TreeBuilder<T> {
+public class FileTreeBuilder extends TreeBuilder {
     
     protected final String rootPath;
     
@@ -19,17 +19,17 @@ public class FileTreeBuilder<T> extends TreeBuilder<T> {
     }
     
     @Override
-    public ITree<T> build() {
+    public ITree build() {
         File file = new File(rootPath);
-        Root<T> root = new Root<>(idGenerator.getId(), separator.replace(file.getName()));
+        Root root = new Root(idGenerator.getId(), separator.replace(file.getName()));
         listImpl(root, root, file, true);
-        return new Tree<>(root, separator);
+        return new Tree(root, separator);
     }
     
-    protected void listImpl(Root<T> root, Node<T> parent, File file, boolean isRoot) {
+    protected void listImpl(Root root, Node parent, File file, boolean isRoot) {
         if (file.isDirectory()) {
             if (!isRoot) {
-                Node<T> temp = new Node<>(idGenerator.getId(), separator.replace(file.getName()));
+                Node temp = new Node(idGenerator.getId(), separator.replace(file.getName()));
                 parent.children.put(temp.name, temp);
                 parent = temp;
             }
@@ -46,15 +46,11 @@ public class FileTreeBuilder<T> extends TreeBuilder<T> {
             String path = separator.replace(file.getAbsolutePath());
             path = path.replace(String.format("%s%s", rootPath, separator.getDesired()), "");
             
-            Leaf<T> leaf = new Leaf<>(idGenerator.getId(), separator.replace(file.getName()), root.name, path, create(file));
+            Leaf leaf = new Leaf(idGenerator.getId(), separator.replace(file.getName()), root.name, path, null);
             parent.children.put(leaf.name, leaf);
             
             root.folderKvs.put(leaf.id, leaf);
             root.fileKvs.put(leaf.path, leaf);
         }
-    }
-    
-    protected T create(File file) {
-        return null;
     }
 }

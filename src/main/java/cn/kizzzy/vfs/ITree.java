@@ -6,43 +6,43 @@ import cn.kizzzy.vfs.tree.Page;
 
 import java.util.List;
 
-public interface ITree<T> {
+public interface ITree {
     
     boolean load();
     
     boolean stop();
     
-    Leaf<T> getLeaf(String path);
+    Leaf getLeaf(String path);
     
-    Node<T> getNode(int id);
+    Node getNode(int id);
     
-    Page<T> getPage(String path, int index, int size);
+    Page getPage(String path, int index, int size);
     
-    default List<Leaf<T>> listLeaf(int id) {
+    default List<Leaf> listLeaf(int id) {
         return listLeaf(id, false);
     }
     
-    List<Leaf<T>> listLeaf(int id, boolean recursively);
+    List<Leaf> listLeaf(int id, boolean recursively);
     
-    default List<Leaf<T>> listLeaf(Node<T> node) {
+    default List<Leaf> listLeaf(Node node) {
         return listLeaf(node, false);
     }
     
-    default List<Leaf<T>> listLeaf(Node<T> node, boolean recursively) {
+    default List<Leaf> listLeaf(Node node, boolean recursively) {
         return listLeaf(node.id, recursively);
     }
     
-    default List<Node<T>> listNode(int id) {
+    default List<Node> listNode(int id) {
         return listNode(id, false);
     }
     
-    List<Node<T>> listNode(int id, boolean recursively);
+    List<Node> listNode(int id, boolean recursively);
     
-    default List<Node<T>> listNode(String path) {
+    default List<Node> listNode(String path) {
         return listNode(path, false);
     }
     
-    List<Node<T>> listNode(String path, boolean recursively);
+    List<Node> listNode(String path, boolean recursively);
     
-    List<Node<T>> listNodeByRegex(String pattern);
+    List<Node> listNodeByRegex(String pattern);
 }

@@ -3,7 +3,7 @@ package cn.kizzzy.vfs.tree;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Node<T> {
+public class Node {
     
     public final int id;
     
@@ -11,7 +11,7 @@ public class Node<T> {
     
     public final String name;
     
-    public final Map<String, Node<T>> children
+    public final Map<String, Node> children
         = new HashMap<>();
     
     public Node(int id, String name) {

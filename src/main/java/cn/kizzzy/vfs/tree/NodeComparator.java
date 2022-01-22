@@ -2,10 +2,10 @@ package cn.kizzzy.vfs.tree;
 
 import java.util.Comparator;
 
-public class NodeComparator<T> implements Comparator<Node<T>> {
+public class NodeComparator implements Comparator<Node> {
     
     @Override
-    public int compare(Node<T> x, Node<T> y) {
+    public int compare(Node x, Node y) {
         String xName = x.name;
         String yName = y.name;
         

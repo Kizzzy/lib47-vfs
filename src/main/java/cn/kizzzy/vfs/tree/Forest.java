@@ -5,17 +5,17 @@ import cn.kizzzy.vfs.ITree;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Forest<T> implements ITree<T> {
+public class Forest implements ITree {
     
-    private final Iterable<ITree<T>> trees;
+    private final Iterable<ITree> trees;
     
-    public Forest(Iterable<ITree<T>> trees) {
+    public Forest(Iterable<ITree> trees) {
         this.trees = trees;
     }
     
     @Override
     public boolean load() {
-        for (ITree<T> tree : trees) {
+        for (ITree tree : trees) {
             if (!tree.load()) {
                 return false;
             }
@@ -25,7 +25,7 @@ public class Forest<T> implements ITree<T> {
     
     @Override
     public boolean stop() {
-        for (ITree<T> tree : trees) {
+        for (ITree tree : trees) {
             if (!tree.stop()) {
                 return false;
             }
@@ -34,9 +34,9 @@ public class Forest<T> implements ITree<T> {
     }
     
     @Override
-    public Leaf<T> getLeaf(String path) {
-        for (ITree<T> tree : trees) {
-            Leaf<T> leaf = tree.getLeaf(path);
+    public Leaf getLeaf(String path) {
+        for (ITree tree : trees) {
+            Leaf leaf = tree.getLeaf(path);
             if (leaf != null) {
                 return leaf;
             }
@@ -45,9 +45,9 @@ public class Forest<T> implements ITree<T> {
     }
     
     @Override
-    public Node<T> getNode(int id) {
-        for (ITree<T> tree : trees) {
-            Node<T> node = tree.getNode(id);
+    public Node getNode(int id) {
+        for (ITree tree : trees) {
+            Node node = tree.getNode(id);
             if (node != null) {
                 return node;
             }
@@ -56,9 +56,9 @@ public class Forest<T> implements ITree<T> {
     }
     
     @Override
-    public Page<T> getPage(String path, int index, int size) {
-        for (ITree<T> tree : trees) {
-            Page<T> node = tree.getPage(path, index, size);
+    public Page getPage(String path, int index, int size) {
+        for (ITree tree : trees) {
+            Page node = tree.getPage(path, index, size);
             if (node != null) {
                 return node;
             }
@@ -67,36 +67,36 @@ public class Forest<T> implements ITree<T> {
     }
     
     @Override
-    public List<Leaf<T>> listLeaf(int id, boolean recursively) {
-        List<Leaf<T>> list = new LinkedList<>();
-        for (ITree<T> tree : trees) {
+    public List<Leaf> listLeaf(int id, boolean recursively) {
+        List<Leaf> list = new LinkedList<>();
+        for (ITree tree : trees) {
             list.addAll(tree.listLeaf(id, recursively));
         }
         return list;
     }
     
     @Override
-    public List<Node<T>> listNode(int id, boolean recursively) {
-        List<Node<T>> list = new LinkedList<>();
-        for (ITree<T> tree : trees) {
+    public List<Node> listNode(int id, boolean recursively) {
+        List<Node> list = new LinkedList<>();
+        for (ITree tree : trees) {
             list.addAll(tree.listNode(id, recursively));
         }
         return list;
     }
     
     @Override
-    public List<Node<T>> listNode(String path, boolean recursively) {
-        List<Node<T>> list = new LinkedList<>();
-        for (ITree<T> tree : trees) {
+    public List<Node> listNode(String path, boolean recursively) {
+        List<Node> list = new LinkedList<>();
+        for (ITree tree : trees) {
             list.addAll(tree.listNode(path, recursively));
         }
         return list;
     }
     
     @Override
-    public List<Node<T>> listNodeByRegex(String regex) {
-        List<Node<T>> list = new LinkedList<>();
-        for (ITree<T> tree : trees) {
+    public List<Node> listNodeByRegex(String regex) {
+        List<Node> list = new LinkedList<>();
+        for (ITree tree : trees) {
             list.addAll(tree.listNodeByRegex(regex));
         }
         return list;

@@ -5,15 +5,21 @@ import cn.kizzzy.io.FullyReader;
 import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
 import cn.kizzzy.vfs.IStreamable;
+import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.streamable.FileStreamable;
+import cn.kizzzy.vfs.tree.EmptyTree;
 
 import java.io.File;
 import java.io.FileOutputStream;
 
-public class FilePackage extends PackageAdapter {
+public class FilePackage extends AbstractPackage {
     
     public FilePackage(String root) {
-        super(root);
+        this(root, new EmptyTree());
+    }
+    
+    public FilePackage(String root, ITree tree) {
+        super(root, tree);
     }
     
     @Override

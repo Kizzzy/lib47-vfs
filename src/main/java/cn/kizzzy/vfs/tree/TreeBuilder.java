@@ -3,7 +3,7 @@ package cn.kizzzy.vfs.tree;
 import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.Separator;
 
-public abstract class TreeBuilder<T> {
+public abstract class TreeBuilder {
     
     protected final Separator separator;
     
@@ -14,5 +14,5 @@ public abstract class TreeBuilder<T> {
         this.idGenerator = idGenerator;
     }
     
-    public abstract ITree<T> build();
+    public abstract ITree build();
 }

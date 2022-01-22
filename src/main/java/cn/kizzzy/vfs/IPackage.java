@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public interface IPackage {
+public interface IPackage extends ITree {
     
     Map<Type, IFileHandler<?>> getHandlerKvs();
     

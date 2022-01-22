@@ -8,7 +8,7 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class ZipTreeBuilder<T> extends TreeBuilder<T> {
+public class ZipTreeBuilder extends TreeBuilder {
     
     protected final String zipFile;
     
@@ -22,15 +22,15 @@ public class ZipTreeBuilder<T> extends TreeBuilder<T> {
     }
     
     @Override
-    public ITree<T> build() {
+    public ITree build() {
         try {
             try (ZipFile zipFile = new ZipFile(this.zipFile)) {
-                Root<T> root = new Root<>(idGenerator.getId(), zipFile.getName());
+                Root root = new Root(idGenerator.getId(), zipFile.getName());
                 
                 for (Enumeration<? extends ZipEntry> e = zipFile.entries(); e.hasMoreElements(); ) {
                     listImpl(root, root, e.nextElement());
                 }
-                return new Tree<>(root, separator);
+                return new Tree(root, separator);
             }
         } catch (Exception e) {
             LogHelper.error(String.format("build zip tree failed: %s", zipFile), e);
@@ -38,26 +38,22 @@ public class ZipTreeBuilder<T> extends TreeBuilder<T> {
         }
     }
     
-    private void listImpl(Root<T> root, Node<T> parent, ZipEntry entry) {
+    private void listImpl(Root root, Node parent, ZipEntry entry) {
         String[] names = separator.split(entry.getName());
         for (String name : names) {
-            Node<T> child = parent.children.get(name);
+            Node child = parent.children.get(name);
             if (child == null) {
                 if (name.contains(".")) {
-                    Leaf<T> leaf = new Leaf<>(idGenerator.getId(), name, root.name, entry.getName(), create(entry));
+                    Leaf leaf = new Leaf(idGenerator.getId(), name, root.name, entry.getName(), null);
                     root.fileKvs.put(leaf.path, leaf);
                     child = leaf;
                 } else {
-                    child = new Node<>(idGenerator.getId(), name);
+                    child = new Node(idGenerator.getId(), name);
                 }
                 root.folderKvs.put(child.id, child);
                 parent.children.put(name, child);
             }
             parent = child;
         }
-    }
-    
-    protected T create(ZipEntry file) {
-        return null;
     }
 }
