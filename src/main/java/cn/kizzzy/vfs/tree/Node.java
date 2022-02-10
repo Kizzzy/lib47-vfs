@@ -27,4 +27,9 @@ public class Node {
     public boolean accept(String name) {
         return this.name.equals(name);
     }
+    
+    @Override
+    public String toString() {
+        return name;
+    }
 }
