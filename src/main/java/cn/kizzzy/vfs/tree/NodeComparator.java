@@ -22,12 +22,8 @@ public class NodeComparator implements Comparator<Node> {
     }
     
     private int compareName(String name1, String name2) {
-        if (name1.matches("^[0-9]+$")) {
-            if (name2.matches("^[0-9]+$")) {
-                if (name1.length() != name2.length()) {
-                    return name1.length() - name2.length();
-                }
-            }
+        if (name1.length() != name2.length()) {
+            return name1.length() - name2.length();
         }
         return name1.compareTo(name2);
     }

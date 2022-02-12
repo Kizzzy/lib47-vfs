@@ -1,14 +1,9 @@
 package cn.kizzzy.vfs.handler;
 
-import cn.kizzzy.vfs.IFileHandler;
-import cn.kizzzy.vfs.IPackage;
-import cn.kizzzy.io.FullyReader;
-
-import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-public abstract class TextFileHandler<T> implements IFileHandler<T> {
+public abstract class TextFileHandler<T> extends BinaryFileHandler<T> {
     
     protected final Charset charset;
     
@@ -21,19 +16,15 @@ public abstract class TextFileHandler<T> implements IFileHandler<T> {
     }
     
     @Override
-    public T load(IPackage pack, String path, FullyReader stream, long size) throws Exception {
-        byte[] buffer = new byte[(int) size];
-        stream.read(buffer);
+    protected T fromBytes(byte[] buffer) throws Exception {
         return loadImpl(new String(buffer, charset));
     }
     
     protected abstract T loadImpl(String str);
     
     @Override
-    public boolean save(IPackage pack, String path, OutputStream stream, T data) throws Exception {
-        byte[] bytes = saveImpl(data).getBytes(charset);
-        stream.write(bytes);
-        return true;
+    protected byte[] toBytes(T data) throws Exception {
+        return saveImpl(data).getBytes(charset);
     }
     
     protected abstract String saveImpl(T data);
