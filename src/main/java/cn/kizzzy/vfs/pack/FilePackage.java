@@ -2,6 +2,8 @@ package cn.kizzzy.vfs.pack;
 
 import cn.kizzzy.helper.FileHelper;
 import cn.kizzzy.io.FullyReader;
+import cn.kizzzy.io.FullyWriter;
+import cn.kizzzy.io.RandomAccessFileWriter;
 import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
 import cn.kizzzy.vfs.IStreamable;
@@ -10,7 +12,7 @@ import cn.kizzzy.vfs.streamable.FileStreamable;
 import cn.kizzzy.vfs.tree.EmptyTree;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.RandomAccessFile;
 
 public class FilePackage extends AbstractPackage {
     
@@ -48,8 +50,9 @@ public class FilePackage extends AbstractPackage {
             throw new RuntimeException("create folder failed: " + fullPath);
         }
         
-        try (FileOutputStream fos = new FileOutputStream(fullPath)) {
-            return saver.save(this, path, fos, data);
+        try (RandomAccessFile accessFile = new RandomAccessFile(fullPath, "rw");
+             FullyWriter writer = new RandomAccessFileWriter(accessFile)) {
+            return saver.save(this, path, writer, data);
         }
     }
 }

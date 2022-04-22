@@ -45,10 +45,6 @@ public class ZipPackage extends AbstractPackage {
     
     @Override
     protected <T> boolean saveImpl(String path, T data, IFileSaver<T> saver) throws Exception {
-        /*try (ZipFile zipFile = new ZipFile(root)) {
-            ZipEntry entry = zipFile.getEntry(path);
-            return saver.save(this, path, zipFile.getOutputStream(entry), data);
-        }*/
         return false;
     }
 }

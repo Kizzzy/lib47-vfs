@@ -1,8 +1,8 @@
 package cn.kizzzy.vfs.streamable;
 
-import cn.kizzzy.vfs.IStreamable;
 import cn.kizzzy.io.FullyReader;
 import cn.kizzzy.io.RandomAccessFileReader;
+import cn.kizzzy.vfs.IStreamable;
 
 import java.io.RandomAccessFile;
 

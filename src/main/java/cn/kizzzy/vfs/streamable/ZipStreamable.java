@@ -1,7 +1,7 @@
 package cn.kizzzy.vfs.streamable;
 
 import cn.kizzzy.io.FullyReader;
-import cn.kizzzy.io.ZipInputStreamReader;
+import cn.kizzzy.io.InputStreamReader;
 import cn.kizzzy.vfs.IStreamable;
 
 import java.util.zip.ZipEntry;
@@ -36,6 +36,6 @@ public class ZipStreamable implements IStreamable {
             zipFile.close();
             throw new NullPointerException();
         }
-        return new ZipInputStreamReader(zipFile.getInputStream(entry), entry.getSize());
+        return new InputStreamReader(zipFile.getInputStream(entry), entry.getSize());
     }
 }

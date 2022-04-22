@@ -1,8 +1,8 @@
 package cn.kizzzy.vfs;
 
-import java.io.OutputStream;
+import cn.kizzzy.io.FullyWriter;
 
 public interface IFileSaver<T> {
     
-    boolean save(IPackage pack, String path, OutputStream stream, T data) throws Exception;
+    boolean save(IPackage vfs, String path, FullyWriter writer, T data) throws Exception;
 }
