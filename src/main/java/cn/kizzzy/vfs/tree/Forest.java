@@ -7,10 +7,18 @@ import java.util.List;
 
 public class Forest implements ITree {
     
-    private final Iterable<ITree> trees;
+    private final List<ITree> trees = new LinkedList<>();
     
-    public Forest(Iterable<ITree> trees) {
-        this.trees = trees;
+    public Forest(ITree... trees) {
+        for (ITree tree : trees) {
+            addTree(tree);
+        }
+    }
+    
+    public Forest(List<ITree> trees) {
+        for (ITree tree : trees) {
+            addTree(tree);
+        }
     }
     
     @Override
@@ -31,6 +39,14 @@ public class Forest implements ITree {
             }
         }
         return true;
+    }
+    
+    public void addTree(ITree tree) {
+        trees.add(tree);
+    }
+    
+    public void removeTree(ITree tree) {
+        trees.remove(tree);
     }
     
     @Override
