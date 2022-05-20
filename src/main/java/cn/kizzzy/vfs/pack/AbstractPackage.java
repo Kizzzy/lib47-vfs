@@ -13,7 +13,6 @@ import cn.kizzzy.vfs.tree.Leaf;
 import cn.kizzzy.vfs.tree.Node;
 import cn.kizzzy.vfs.tree.Page;
 
-import java.io.File;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +20,6 @@ import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractPackage implements IPackage {
-    
-    protected static final Separator FILE_SEPARATOR
-        = new Separator(File.separatorChar, false);
     
     protected final String root;
     
@@ -33,7 +29,7 @@ public abstract class AbstractPackage implements IPackage {
         = new HashMap<>();
     
     public AbstractPackage(String root, ITree tree) {
-        this.root = FILE_SEPARATOR.replace(root);
+        this.root = Separator.FILE_SEPARATOR.replace(root);
         this.tree = tree;
         
         initDefaultHandler();

@@ -8,6 +8,7 @@ import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
 import cn.kizzzy.vfs.IStreamable;
 import cn.kizzzy.vfs.ITree;
+import cn.kizzzy.vfs.Separator;
 import cn.kizzzy.vfs.streamable.FileStreamable;
 import cn.kizzzy.vfs.tree.EmptyTree;
 
@@ -26,13 +27,13 @@ public class FilePackage extends AbstractPackage {
     
     @Override
     public boolean exist(String path) {
-        path = FILE_SEPARATOR.combine(root, path);
+        path = Separator.FILE_SEPARATOR.combine(root, path);
         return new File(path).exists();
     }
     
     @Override
     protected Object loadImpl(String path, IFileLoader<?> loader) throws Exception {
-        String fullPath = FILE_SEPARATOR.combine(root, path);
+        String fullPath = Separator.FILE_SEPARATOR.combine(root, path);
         FileStreamable streamable = new FileStreamable(fullPath);
         try (FullyReader stream = streamable.OpenStream()) {
             Object obj = loader.load(this, path, stream, stream.length());
@@ -45,7 +46,7 @@ public class FilePackage extends AbstractPackage {
     
     @Override
     protected <T> boolean saveImpl(String path, T data, IFileSaver<T> saver) throws Exception {
-        String fullPath = FILE_SEPARATOR.combine(root, path);
+        String fullPath = Separator.FILE_SEPARATOR.combine(root, path);
         if (!FileHelper.createFolderIfAbsent(new File(fullPath).getParent())) {
             throw new RuntimeException("create folder failed: " + fullPath);
         }

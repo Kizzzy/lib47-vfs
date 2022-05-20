@@ -1,5 +1,7 @@
 package cn.kizzzy.vfs;
 
+import java.io.File;
+
 public class Separator {
     
     public static final char SLASH = '/';
@@ -21,6 +23,9 @@ public class Separator {
     
     public static final Separator BACKSLASH_SEPARATOR_LOWERCASE
         = new Separator(BACKSLASH, true);
+    
+    public static final Separator FILE_SEPARATOR
+        = new Separator(File.separatorChar, false);
     
     protected final char undesired;
     protected final String undesiredSplitter;
