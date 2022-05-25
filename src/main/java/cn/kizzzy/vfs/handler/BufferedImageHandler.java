@@ -1,7 +1,7 @@
 package cn.kizzzy.vfs.handler;
 
-import cn.kizzzy.io.FullyReader;
-import cn.kizzzy.io.FullyWriter;
+import cn.kizzzy.io.IFullyReader;
+import cn.kizzzy.io.IFullyWriter;
 import cn.kizzzy.vfs.IFileHandler;
 import cn.kizzzy.vfs.IPackage;
 
@@ -21,13 +21,13 @@ public class BufferedImageHandler implements IFileHandler<BufferedImage> {
     }
     
     @Override
-    public BufferedImage load(IPackage vfs, String s, FullyReader inputStream, long l) throws Exception {
-        return ImageIO.read(inputStream);
+    public BufferedImage load(IPackage vfs, String s, IFullyReader reader, long size) throws Exception {
+        return ImageIO.read(reader.asInputStream());
     }
     
     @Override
-    public boolean save(IPackage vfs, String s, FullyWriter writer, BufferedImage bufferedImage) throws Exception {
-        ImageIO.write(bufferedImage, format, writer);
+    public boolean save(IPackage vfs, String path, IFullyWriter writer, BufferedImage data) throws Exception {
+        ImageIO.write(data, format, writer.asOutputStream());
         return true;
     }
 }

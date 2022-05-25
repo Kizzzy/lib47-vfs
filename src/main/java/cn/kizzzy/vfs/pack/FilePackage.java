@@ -1,8 +1,8 @@
 package cn.kizzzy.vfs.pack;
 
 import cn.kizzzy.helper.FileHelper;
-import cn.kizzzy.io.FullyReader;
-import cn.kizzzy.io.FullyWriter;
+import cn.kizzzy.io.IFullyReader;
+import cn.kizzzy.io.IFullyWriter;
 import cn.kizzzy.io.RandomAccessFileWriter;
 import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
@@ -35,7 +35,7 @@ public class FilePackage extends AbstractPackage {
     protected Object loadImpl(String path, IFileLoader<?> loader) throws Exception {
         String fullPath = Separator.FILE_SEPARATOR.combine(root, path);
         FileStreamable streamable = new FileStreamable(fullPath);
-        try (FullyReader stream = streamable.OpenStream()) {
+        try (IFullyReader stream = streamable.OpenStream()) {
             Object obj = loader.load(this, path, stream, stream.length());
             if (obj instanceof IStreamable) {
                 ((IStreamable) obj).setSource(streamable);
@@ -52,7 +52,7 @@ public class FilePackage extends AbstractPackage {
         }
         
         try (RandomAccessFile accessFile = new RandomAccessFile(fullPath, "rw");
-             FullyWriter writer = new RandomAccessFileWriter(accessFile)) {
+             IFullyWriter writer = new RandomAccessFileWriter(accessFile)) {
             return saver.save(this, path, writer, data);
         }
     }

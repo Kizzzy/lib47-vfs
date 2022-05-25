@@ -1,6 +1,6 @@
 package cn.kizzzy.vfs.streamable;
 
-import cn.kizzzy.io.FullyReader;
+import cn.kizzzy.io.IFullyReader;
 import cn.kizzzy.io.RandomAccessFileReader;
 import cn.kizzzy.vfs.IStreamable;
 
@@ -26,7 +26,7 @@ public class FileStreamable implements IStreamable {
         this.source = source;
     }
     
-    public FullyReader OpenStream() throws Exception {
+    public IFullyReader OpenStream() throws Exception {
         return new RandomAccessFileReader(new RandomAccessFile(file, "r"));
     }
 }

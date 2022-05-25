@@ -1,6 +1,6 @@
 package cn.kizzzy.vfs.streamable;
 
-import cn.kizzzy.io.FullyReader;
+import cn.kizzzy.io.IFullyReader;
 import cn.kizzzy.io.InputStreamReader;
 import cn.kizzzy.vfs.IStreamable;
 
@@ -29,7 +29,7 @@ public class ZipStreamable implements IStreamable {
         this.source = source;
     }
     
-    public FullyReader OpenStream() throws Exception {
+    public IFullyReader OpenStream() throws Exception {
         ZipFile zipFile = new ZipFile(file);
         ZipEntry entry = zipFile.getEntry(path);
         if (entry == null) {
