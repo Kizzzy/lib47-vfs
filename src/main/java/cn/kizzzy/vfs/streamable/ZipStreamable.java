@@ -1,9 +1,11 @@
 package cn.kizzzy.vfs.streamable;
 
+import cn.kizzzy.io.ByteArrayInputStreamReader;
 import cn.kizzzy.io.IFullyReader;
-import cn.kizzzy.io.InputStreamReader;
 import cn.kizzzy.vfs.IStreamable;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -30,12 +32,21 @@ public class ZipStreamable implements IStreamable {
     }
     
     public IFullyReader OpenStream() throws Exception {
-        ZipFile zipFile = new ZipFile(file);
-        ZipEntry entry = zipFile.getEntry(path);
-        if (entry == null) {
-            zipFile.close();
-            throw new NullPointerException();
+        try (ZipFile zipFile = new ZipFile(file)) {
+            ZipEntry entry = zipFile.getEntry(path);
+            if (entry == null) {
+                throw new NullPointerException();
+            }
+            
+            try (InputStream is = zipFile.getInputStream(entry);
+                 ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+                byte[] buffer = new byte[8192];
+                int n = 0;
+                while ((n = is.read(buffer)) > 0) {
+                    bos.write(buffer, 0, n);
+                }
+                return new ByteArrayInputStreamReader(bos.toByteArray());
+            }
         }
-        return new InputStreamReader(zipFile.getInputStream(entry), entry.getSize());
     }
 }
