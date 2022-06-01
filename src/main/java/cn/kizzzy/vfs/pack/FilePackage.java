@@ -51,8 +51,10 @@ public class FilePackage extends AbstractPackage {
             throw new RuntimeException("create folder failed: " + fullPath);
         }
         
-        try (RandomAccessFile accessFile = new RandomAccessFile(fullPath, "rw");
-             IFullyWriter writer = new RandomAccessFileWriter(accessFile)) {
+        try (
+            RandomAccessFile accessFile = new RandomAccessFile(fullPath, "rw");
+            IFullyWriter writer = new RandomAccessFileWriter(accessFile)) {
+            accessFile.setLength(0);
             return saver.save(this, path, writer, data);
         }
     }
