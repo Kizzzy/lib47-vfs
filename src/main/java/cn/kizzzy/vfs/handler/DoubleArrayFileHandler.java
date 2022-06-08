@@ -20,9 +20,9 @@ public class DoubleArrayFileHandler implements IFileHandler<double[]> {
     @Override
     public double[] load(IPackage vfs, String path, IFullyReader reader, long size) throws Exception {
         if (littleEndian) {
-            return reader.readDoubleExs((int) (size / 4));
+            return reader.readDoubleExs((int) (size / 8));
         } else {
-            return reader.readDoubles((int) (size / 4));
+            return reader.readDoubles((int) (size / 8));
         }
     }
     
