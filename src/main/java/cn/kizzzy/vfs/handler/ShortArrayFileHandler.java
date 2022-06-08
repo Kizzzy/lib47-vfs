@@ -5,7 +5,7 @@ import cn.kizzzy.io.IFullyWriter;
 import cn.kizzzy.vfs.IFileHandler;
 import cn.kizzzy.vfs.IPackage;
 
-public class ShortArrayFileHandler implements IFileHandler<int[]> {
+public class ShortArrayFileHandler implements IFileHandler<short[]> {
     
     private final boolean littleEndian;
     
@@ -18,7 +18,7 @@ public class ShortArrayFileHandler implements IFileHandler<int[]> {
     }
     
     @Override
-    public int[] load(IPackage vfs, String path, IFullyReader reader, long size) throws Exception {
+    public short[] load(IPackage vfs, String path, IFullyReader reader, long size) throws Exception {
         if (littleEndian) {
             return reader.readShortExs((int) (size / 2));
         } else {
@@ -27,7 +27,7 @@ public class ShortArrayFileHandler implements IFileHandler<int[]> {
     }
     
     @Override
-    public boolean save(IPackage vfs, String path, IFullyWriter writer, int[] data) throws Exception {
+    public boolean save(IPackage vfs, String path, IFullyWriter writer, short[] data) throws Exception {
         if (littleEndian) {
             writer.writeShortExs(data);
         } else {
