@@ -16,15 +16,29 @@ public interface IPackage extends ITree {
     
     boolean exist(String path);
     
-    Object load(String path, Type clazz);
-    
-    Object load(String path, IFileLoader<?> loader);
+    IStreamable getStreamable(String path);
     
     default <T> T load(String path, Class<T> clazz) {
         return (T) load(path, (Type) clazz);
     }
     
-    <T> boolean save(String path, T data);
+    default Object load(String path, Type clazz) {
+        IFileHandler<?> loader = getHandler(clazz);
+        if (loader != null) {
+            return load(path, loader);
+        }
+        return null;
+    }
+    
+    Object load(String path, IFileLoader<?> loader);
+    
+    default <T> boolean save(String path, T data) {
+        IFileHandler<T> saver = (IFileHandler<T>) getHandler(data.getClass());
+        if (saver != null) {
+            return save(path, data, saver);
+        }
+        return false;
+    }
     
     <T> boolean save(String path, T data, IFileSaver<T> saver);
 }

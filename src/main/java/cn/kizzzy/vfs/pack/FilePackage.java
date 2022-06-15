@@ -1,10 +1,8 @@
 package cn.kizzzy.vfs.pack;
 
 import cn.kizzzy.helper.FileHelper;
-import cn.kizzzy.io.IFullyReader;
 import cn.kizzzy.io.IFullyWriter;
 import cn.kizzzy.io.RandomAccessFileWriter;
-import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
 import cn.kizzzy.vfs.IStreamable;
 import cn.kizzzy.vfs.ITree;
@@ -32,16 +30,9 @@ public class FilePackage extends AbstractPackage {
     }
     
     @Override
-    protected Object loadImpl(String path, IFileLoader<?> loader) throws Exception {
+    protected IStreamable getStreamableImpl(String path) {
         String fullPath = Separator.FILE_SEPARATOR.combine(root, path);
-        FileStreamable streamable = new FileStreamable(fullPath);
-        try (IFullyReader stream = streamable.OpenStream()) {
-            Object obj = loader.load(this, path, stream, stream.length());
-            if (obj instanceof IStreamable) {
-                ((IStreamable) obj).setSource(streamable);
-            }
-            return obj;
-        }
+        return new FileStreamable(fullPath);
     }
     
     @Override

@@ -1,10 +1,12 @@
 package cn.kizzzy.vfs.pack;
 
 import cn.kizzzy.helper.LogHelper;
+import cn.kizzzy.io.IFullyReader;
 import cn.kizzzy.vfs.IFileHandler;
 import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
 import cn.kizzzy.vfs.IPackage;
+import cn.kizzzy.vfs.IStreamable;
 import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.Separator;
 import cn.kizzzy.vfs.handler.BytesFileHandler;
@@ -51,35 +53,36 @@ public abstract class AbstractPackage implements IPackage {
     }
     
     @Override
-    public Object load(String path, Type clazz) {
-        IFileHandler<?> loader = getHandler(clazz);
-        if (loader != null) {
-            return load(path, loader);
+    public IStreamable getStreamable(String path) {
+        if (exist(path)) {
+            return getStreamableImpl(path);
         }
         return null;
     }
+    
+    protected abstract IStreamable getStreamableImpl(String path);
     
     @Override
     public Object load(String path, IFileLoader<?> loader) {
         try {
             if (exist(path)) {
-                return loadImpl(path, loader);
+                IStreamable streamable = getStreamable(path);
+                if (streamable == null) {
+                    return null;
+                }
+                
+                try (IFullyReader reader = streamable.OpenStream()) {
+                    Object obj = loader.load(this, path, reader, reader.length());
+                    if (obj instanceof IStreamable) {
+                        ((IStreamable) obj).setSource(streamable);
+                    }
+                    return obj;
+                }
             }
         } catch (Exception e) {
             LogHelper.error(String.format("load error: %s", path), e);
         }
         return null;
-    }
-    
-    protected abstract Object loadImpl(String path, IFileLoader<?> loader) throws Exception;
-    
-    @Override
-    public <T> boolean save(String path, T data) {
-        IFileHandler<T> saver = (IFileHandler<T>) getHandler(data.getClass());
-        if (saver != null) {
-            return save(path, data, saver);
-        }
-        return false;
     }
     
     @Override

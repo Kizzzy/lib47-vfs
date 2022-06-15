@@ -1,7 +1,5 @@
 package cn.kizzzy.vfs.pack;
 
-import cn.kizzzy.io.IFullyReader;
-import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
 import cn.kizzzy.vfs.IStreamable;
 import cn.kizzzy.vfs.ITree;
@@ -32,15 +30,8 @@ public class ZipPackage extends AbstractPackage {
     }
     
     @Override
-    protected Object loadImpl(String path, IFileLoader<?> loader) throws Exception {
-        ZipStreamable streamable = new ZipStreamable(root, path);
-        try (IFullyReader reader = streamable.OpenStream()) {
-            Object obj = loader.load(this, path, reader, reader.length());
-            if (obj instanceof IStreamable) {
-                ((IStreamable) obj).setSource(streamable);
-            }
-            return obj;
-        }
+    protected IStreamable getStreamableImpl(String path) {
+        return new ZipStreamable(root, path);
     }
     
     @Override

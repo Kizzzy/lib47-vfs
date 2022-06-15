@@ -4,6 +4,7 @@ import cn.kizzzy.vfs.IFileHandler;
 import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
 import cn.kizzzy.vfs.IPackage;
+import cn.kizzzy.vfs.IStreamable;
 import cn.kizzzy.vfs.tree.Forest;
 
 import java.lang.reflect.Type;
@@ -55,6 +56,17 @@ public class CombinePackage extends Forest implements IPackage {
             }
         }
         return false;
+    }
+    
+    @Override
+    public IStreamable getStreamable(String path) {
+        for (IPackage vfs : vfsList) {
+            IStreamable streamable = vfs.getStreamable(path);
+            if (streamable != null) {
+                return streamable;
+            }
+        }
+        return null;
     }
     
     @Override
