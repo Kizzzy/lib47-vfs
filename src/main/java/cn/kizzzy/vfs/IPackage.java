@@ -1,18 +1,21 @@
 package cn.kizzzy.vfs;
 
 import java.lang.reflect.Type;
-import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public interface IPackage extends ITree {
     
-    Map<Type, IFileHandler<?>> getHandlerKvs();
+    default <T> boolean addHandler(Class<T> clazz, IFileHandler<T> handler) {
+        return addHandler((Type) clazz, handler);
+    }
     
-    IFileHandler<?> getHandler(Type clazz);
+    boolean addHandler(Type type, IFileHandler<?> handler);
     
     default <T> IFileHandler<T> getHandler(Class<T> clazz) {
         return (IFileHandler<T>) getHandler((Type) clazz);
     }
+    
+    IFileHandler<?> getHandler(Type clazz);
     
     boolean exist(String path);
     

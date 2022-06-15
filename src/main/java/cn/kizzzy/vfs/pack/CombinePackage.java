@@ -10,7 +10,6 @@ import cn.kizzzy.vfs.tree.Forest;
 import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class CombinePackage extends Forest implements IPackage {
     
@@ -39,8 +38,8 @@ public class CombinePackage extends Forest implements IPackage {
     }
     
     @Override
-    public Map<Type, IFileHandler<?>> getHandlerKvs() {
-        return null;
+    public boolean addHandler(Type type, IFileHandler<?> handler) {
+        return false;
     }
     
     @Override

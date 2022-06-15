@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("unchecked")
 public abstract class AbstractPackage implements IPackage {
     
     protected final String root;
@@ -38,13 +37,14 @@ public abstract class AbstractPackage implements IPackage {
     }
     
     protected void initDefaultHandler() {
-        handlerKvs.put(byte[].class, new BytesFileHandler());
-        handlerKvs.put(String.class, new StringFileHandler());
+        addHandler(byte[].class, new BytesFileHandler());
+        addHandler(String.class, new StringFileHandler());
     }
     
     @Override
-    public Map<Type, IFileHandler<?>> getHandlerKvs() {
-        return handlerKvs;
+    public boolean addHandler(Type type, IFileHandler<?> handler) {
+        handlerKvs.put(type, handler);
+        return true;
     }
     
     @Override
