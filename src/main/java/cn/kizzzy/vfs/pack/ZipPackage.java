@@ -2,15 +2,15 @@ package cn.kizzzy.vfs.pack;
 
 import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.streamable.ZipStreamGetterFactory;
-import cn.kizzzy.vfs.tree.EmptyTree;
+import cn.kizzzy.vfs.tree.ZipTreeBuilder;
 
 public class ZipPackage extends AbstractPackage {
     
-    public ZipPackage(String root) {
-        this(root, new EmptyTree());
+    public ZipPackage(String file) {
+        this(file, new ZipTreeBuilder(file).build());
     }
     
-    public ZipPackage(String root, ITree tree) {
-        super(tree, new ZipStreamGetterFactory(root));
+    public ZipPackage(String file, ITree tree) {
+        super(tree, new ZipStreamGetterFactory(file));
     }
 }
