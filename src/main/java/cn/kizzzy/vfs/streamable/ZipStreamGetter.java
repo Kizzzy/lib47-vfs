@@ -2,36 +2,34 @@ package cn.kizzzy.vfs.streamable;
 
 import cn.kizzzy.io.ByteArrayInputStreamReader;
 import cn.kizzzy.io.IFullyReader;
-import cn.kizzzy.vfs.IStreamable;
+import cn.kizzzy.vfs.IInputStreamGetter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class ZipStreamable implements IStreamable {
+public class ZipStreamGetter implements IInputStreamGetter {
     
     private final String file;
     private final String path;
     
-    private IStreamable source;
-    
-    public ZipStreamable(String file, String path) {
+    public ZipStreamGetter(String file, String path) {
         this.file = file;
         this.path = path;
     }
     
     @Override
-    public IStreamable getSource() {
-        return source;
+    public IInputStreamGetter getSource() {
+        return null;
     }
     
     @Override
-    public void setSource(IStreamable source) {
-        this.source = source;
+    public void setSource(IInputStreamGetter source) {
+    
     }
     
-    public IFullyReader OpenStream() throws Exception {
+    public IFullyReader getInput() throws Exception {
         try (ZipFile zipFile = new ZipFile(file)) {
             ZipEntry entry = zipFile.getEntry(path);
             if (entry == null) {

@@ -2,13 +2,15 @@ package cn.kizzzy.vfs.pack;
 
 import cn.kizzzy.helper.LogHelper;
 import cn.kizzzy.io.IFullyReader;
+import cn.kizzzy.io.IFullyWriter;
 import cn.kizzzy.vfs.IFileHandler;
 import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
+import cn.kizzzy.vfs.IInputStreamGetter;
+import cn.kizzzy.vfs.IOutputStreamGetter;
 import cn.kizzzy.vfs.IPackage;
-import cn.kizzzy.vfs.IStreamable;
+import cn.kizzzy.vfs.IStreamGetterFactory;
 import cn.kizzzy.vfs.ITree;
-import cn.kizzzy.vfs.Separator;
 import cn.kizzzy.vfs.handler.BytesFileHandler;
 import cn.kizzzy.vfs.handler.StringFileHandler;
 import cn.kizzzy.vfs.tree.Leaf;
@@ -22,16 +24,16 @@ import java.util.Map;
 
 public abstract class AbstractPackage implements IPackage {
     
-    protected final String root;
-    
     protected final ITree tree;
+    
+    protected final IStreamGetterFactory factory;
     
     protected final Map<Type, IFileHandler<?>> handlerKvs
         = new HashMap<>();
     
-    public AbstractPackage(String root, ITree tree) {
-        this.root = Separator.FILE_SEPARATOR.replace(root);
+    public AbstractPackage(ITree tree, IStreamGetterFactory factory) {
         this.tree = tree;
+        this.factory = factory;
         
         initDefaultHandler();
     }
@@ -53,28 +55,27 @@ public abstract class AbstractPackage implements IPackage {
     }
     
     @Override
-    public IStreamable getStreamable(String path) {
+    public IInputStreamGetter getInputStreamGetter(String path) {
         if (exist(path)) {
-            return getStreamableImpl(path);
+            return factory.getInputStreamGetter(path);
         }
         return null;
     }
     
-    protected abstract IStreamable getStreamableImpl(String path);
+    @Override
+    public IOutputStreamGetter getOutputStreamGetter(String path) {
+        return factory.getOutputStreamGetter(path);
+    }
     
     @Override
     public Object load(String path, IFileLoader<?> loader) {
         try {
-            if (exist(path)) {
-                IStreamable streamable = getStreamable(path);
-                if (streamable == null) {
-                    return null;
-                }
-                
-                try (IFullyReader reader = streamable.OpenStream()) {
+            IInputStreamGetter getter = getInputStreamGetter(path);
+            if (getter != null) {
+                try (IFullyReader reader = getter.getInput()) {
                     Object obj = loader.load(this, path, reader, reader.length());
-                    if (obj instanceof IStreamable) {
-                        ((IStreamable) obj).setSource(streamable);
+                    if (obj instanceof IInputStreamGetter) {
+                        ((IInputStreamGetter) obj).setSource(getter);
                     }
                     return obj;
                 }
@@ -88,14 +89,17 @@ public abstract class AbstractPackage implements IPackage {
     @Override
     public <T> boolean save(String path, T data, IFileSaver<T> saver) {
         try {
-            return saveImpl(path, data, saver);
+            IOutputStreamGetter getter = getOutputStreamGetter(path);
+            if (getter != null) {
+                try (IFullyWriter writer = getter.getOutput()) {
+                    return saver.save(this, path, writer, data);
+                }
+            }
         } catch (Exception e) {
             LogHelper.error(String.format("save error: %s", path), e);
         }
         return false;
     }
-    
-    protected abstract <T> boolean saveImpl(String path, T data, IFileSaver<T> saver) throws Exception;
     
     @Override
     public boolean load() {

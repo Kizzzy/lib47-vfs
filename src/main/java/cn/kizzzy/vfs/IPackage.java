@@ -3,7 +3,7 @@ package cn.kizzzy.vfs;
 import java.lang.reflect.Type;
 
 @SuppressWarnings("unchecked")
-public interface IPackage extends ITree {
+public interface IPackage extends ITree, IStreamGetterFactory {
     
     default <T> boolean addHandler(Class<T> clazz, IFileHandler<T> handler) {
         return addHandler((Type) clazz, handler);
@@ -17,9 +17,9 @@ public interface IPackage extends ITree {
     
     IFileHandler<?> getHandler(Type clazz);
     
-    boolean exist(String path);
-    
-    IStreamable getStreamable(String path);
+    default boolean exist(String path) {
+        return getLeaf(path) != null;
+    }
     
     default <T> T load(String path, Class<T> clazz) {
         return (T) load(path, (Type) clazz);
