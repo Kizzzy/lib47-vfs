@@ -1,4 +1,4 @@
-package cn.kizzzy.vfs.streamable;
+package cn.kizzzy.vfs.stream;
 
 import cn.kizzzy.vfs.IInputStreamGetter;
 import cn.kizzzy.vfs.IOutputStreamGetter;
@@ -35,11 +35,11 @@ public class LeafStreamGetterFactory<T extends IInputStreamGetter> implements IS
         
         T entry = (T) leaf.item;
         if (entry.getSource() == null) {
-            IInputStreamGetter streamable = factory.getInputStreamGetter(callback.apply(entry));
-            if (streamable == null) {
+            IInputStreamGetter getter = factory.getInputStreamGetter(callback.apply(entry));
+            if (getter == null) {
                 return null;
             }
-            entry.setSource(streamable);
+            entry.setSource(getter);
         }
         
         return entry;

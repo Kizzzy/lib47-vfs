@@ -1,4 +1,4 @@
-package cn.kizzzy.vfs.streamable;
+package cn.kizzzy.vfs.stream;
 
 import cn.kizzzy.vfs.IInputStreamGetter;
 import cn.kizzzy.vfs.IOutputStreamGetter;

@@ -1,7 +1,7 @@
 package cn.kizzzy.vfs.pack;
 
 import cn.kizzzy.vfs.ITree;
-import cn.kizzzy.vfs.streamable.ZipStreamGetterFactory;
+import cn.kizzzy.vfs.stream.ZipStreamGetterFactory;
 import cn.kizzzy.vfs.tree.ZipTreeBuilder;
 
 public class ZipPackage extends AbstractPackage {

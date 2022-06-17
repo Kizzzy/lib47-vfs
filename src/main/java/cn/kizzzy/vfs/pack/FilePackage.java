@@ -2,7 +2,7 @@ package cn.kizzzy.vfs.pack;
 
 import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.Separator;
-import cn.kizzzy.vfs.streamable.FileStreamGetterFactory;
+import cn.kizzzy.vfs.stream.FileStreamGetterFactory;
 import cn.kizzzy.vfs.tree.EmptyTree;
 
 import java.io.File;

@@ -1,17 +1,20 @@
-package cn.kizzzy.vfs.streamable;
+package cn.kizzzy.vfs.stream;
 
 import cn.kizzzy.io.ByteArrayInputStreamReader;
 import cn.kizzzy.io.IFullyReader;
+import cn.kizzzy.io.IFullyWriter;
 import cn.kizzzy.vfs.IInputStreamGetter;
+import cn.kizzzy.vfs.IOutputStreamGetter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class ZipStreamGetter implements IInputStreamGetter {
+public class ZipStreamGetter implements IInputStreamGetter, IOutputStreamGetter {
     
     private final String file;
+    
     private final String path;
     
     public ZipStreamGetter(String file, String path) {
@@ -46,5 +49,10 @@ public class ZipStreamGetter implements IInputStreamGetter {
                 return new ByteArrayInputStreamReader(bos.toByteArray());
             }
         }
+    }
+    
+    @Override
+    public IFullyWriter getOutput() throws Exception {
+        return null;
     }
 }

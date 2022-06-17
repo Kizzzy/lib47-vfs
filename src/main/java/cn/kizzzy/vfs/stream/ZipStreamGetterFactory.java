@@ -1,4 +1,4 @@
-package cn.kizzzy.vfs.streamable;
+package cn.kizzzy.vfs.stream;
 
 import cn.kizzzy.vfs.IInputStreamGetter;
 import cn.kizzzy.vfs.IOutputStreamGetter;
@@ -19,6 +19,6 @@ public class ZipStreamGetterFactory implements IStreamGetterFactory {
     
     @Override
     public IOutputStreamGetter getOutputStreamGetter(String path) {
-        return null;
+        return new ZipStreamGetter(file, path);
     }
 }
