@@ -22,16 +22,6 @@ public class ZipStreamGetter implements IInputStreamGetter, IOutputStreamGetter 
         this.path = path;
     }
     
-    @Override
-    public IInputStreamGetter getSource() {
-        return null;
-    }
-    
-    @Override
-    public void setSource(IInputStreamGetter source) {
-    
-    }
-    
     public IFullyReader getInput() throws Exception {
         try (ZipFile zipFile = new ZipFile(file)) {
             ZipEntry entry = zipFile.getEntry(path);

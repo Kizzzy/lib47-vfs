@@ -18,16 +18,6 @@ public class FileStreamGetter implements IInputStreamGetter, IOutputStreamGetter
         this.file = file;
     }
     
-    @Override
-    public IInputStreamGetter getSource() {
-        return null;
-    }
-    
-    @Override
-    public void setSource(IInputStreamGetter source) {
-    
-    }
-    
     public IFullyReader getInput() throws Exception {
         return new RandomAccessFileReader(file);
     }

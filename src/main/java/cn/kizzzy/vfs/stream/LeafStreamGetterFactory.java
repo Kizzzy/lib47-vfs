@@ -1,5 +1,6 @@
 package cn.kizzzy.vfs.stream;
 
+import cn.kizzzy.vfs.IHolderInputStreamGetter;
 import cn.kizzzy.vfs.IInputStreamGetter;
 import cn.kizzzy.vfs.IOutputStreamGetter;
 import cn.kizzzy.vfs.IStreamGetterFactory;
@@ -9,7 +10,7 @@ import cn.kizzzy.vfs.tree.Leaf;
 import java.util.function.Function;
 
 @SuppressWarnings("unchecked")
-public class LeafStreamGetterFactory<T extends IInputStreamGetter> implements IStreamGetterFactory {
+public class LeafStreamGetterFactory<T extends IHolderInputStreamGetter> implements IStreamGetterFactory {
     
     private final ITree tree;
     

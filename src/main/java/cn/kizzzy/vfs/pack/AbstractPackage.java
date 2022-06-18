@@ -6,6 +6,7 @@ import cn.kizzzy.io.IFullyWriter;
 import cn.kizzzy.vfs.IFileHandler;
 import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
+import cn.kizzzy.vfs.IHolderInputStreamGetter;
 import cn.kizzzy.vfs.IInputStreamGetter;
 import cn.kizzzy.vfs.IOutputStreamGetter;
 import cn.kizzzy.vfs.IPackage;
@@ -74,8 +75,8 @@ public abstract class AbstractPackage implements IPackage {
             if (getter != null) {
                 try (IFullyReader reader = getter.getInput()) {
                     Object obj = loader.load(this, path, reader, reader.length());
-                    if (obj instanceof IInputStreamGetter) {
-                        ((IInputStreamGetter) obj).setSource(getter);
+                    if (obj instanceof IHolderInputStreamGetter) {
+                        ((IHolderInputStreamGetter) obj).setSource(getter);
                     }
                     return obj;
                 }
