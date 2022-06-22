@@ -19,20 +19,14 @@ public class DoubleArrayFileHandler implements IFileHandler<double[]> {
     
     @Override
     public double[] load(IPackage vfs, String path, IFullyReader reader, long size) throws Exception {
-        if (littleEndian) {
-            return reader.readDoubleExs((int) (size / 8));
-        } else {
-            return reader.readDoubles((int) (size / 8));
-        }
+        reader.setLittleEndian(littleEndian);
+        return reader.readDoubles((int) (size / 8));
     }
     
     @Override
     public boolean save(IPackage vfs, String path, IFullyWriter writer, double[] data) throws Exception {
-        if (littleEndian) {
-            writer.writeDoubleExs(data);
-        } else {
-            writer.writeDoubles(data);
-        }
+        writer.setLittleEndian(littleEndian);
+        writer.writeDoubles(data);
         return true;
     }
 }

@@ -19,20 +19,14 @@ public class ShortArrayFileHandler implements IFileHandler<short[]> {
     
     @Override
     public short[] load(IPackage vfs, String path, IFullyReader reader, long size) throws Exception {
-        if (littleEndian) {
-            return reader.readShortExs((int) (size / 2));
-        } else {
-            return reader.readShorts((int) (size / 2));
-        }
+        reader.setLittleEndian(littleEndian);
+        return reader.readShorts((int) (size / 2));
     }
     
     @Override
     public boolean save(IPackage vfs, String path, IFullyWriter writer, short[] data) throws Exception {
-        if (littleEndian) {
-            writer.writeShortExs(data);
-        } else {
-            writer.writeShorts(data);
-        }
+        writer.setLittleEndian(littleEndian);
+        writer.writeShorts(data);
         return true;
     }
 }

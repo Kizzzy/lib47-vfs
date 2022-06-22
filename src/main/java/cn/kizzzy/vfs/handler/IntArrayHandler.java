@@ -19,20 +19,14 @@ public class IntArrayHandler implements IFileHandler<int[]> {
     
     @Override
     public int[] load(IPackage vfs, String path, IFullyReader reader, long size) throws Exception {
-        if (littleEndian) {
-            return reader.readIntExs((int) (size / 4));
-        } else {
-            return reader.readInts((int) (size / 4));
-        }
+        reader.setLittleEndian(littleEndian);
+        return reader.readInts((int) (size / 4));
     }
     
     @Override
     public boolean save(IPackage vfs, String path, IFullyWriter writer, int[] data) throws Exception {
-        if (littleEndian) {
-            writer.writeIntExs(data);
-        } else {
-            writer.writeInts(data);
-        }
+        writer.setLittleEndian(littleEndian);
+        writer.writeInts(data);
         return true;
     }
 }

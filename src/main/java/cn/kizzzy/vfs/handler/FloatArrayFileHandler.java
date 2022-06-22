@@ -19,20 +19,14 @@ public class FloatArrayFileHandler implements IFileHandler<float[]> {
     
     @Override
     public float[] load(IPackage vfs, String path, IFullyReader reader, long size) throws Exception {
-        if (littleEndian) {
-            return reader.readFloatExs((int) (size / 4));
-        } else {
-            return reader.readFloats((int) (size / 4));
-        }
+        reader.setLittleEndian(littleEndian);
+        return reader.readFloats((int) (size / 4));
     }
     
     @Override
     public boolean save(IPackage vfs, String path, IFullyWriter writer, float[] data) throws Exception {
-        if (littleEndian) {
-            writer.writeFloatExs(data);
-        } else {
-            writer.writeFloats(data);
-        }
+        writer.setLittleEndian(littleEndian);
+        writer.writeFloats(data);
         return true;
     }
 }

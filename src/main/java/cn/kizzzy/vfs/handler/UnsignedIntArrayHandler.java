@@ -19,20 +19,14 @@ public class UnsignedIntArrayHandler implements IFileHandler<long[]> {
     
     @Override
     public long[] load(IPackage vfs, String path, IFullyReader reader, long size) throws Exception {
-        if (littleEndian) {
-            return reader.readUnsignedIntExs((int) (size / 4));
-        } else {
-            return reader.readUnsignedInts((int) (size / 4));
-        }
+        reader.setLittleEndian(littleEndian);
+        return reader.readUnsignedInts((int) (size / 4));
     }
     
     @Override
     public boolean save(IPackage vfs, String path, IFullyWriter writer, long[] data) throws Exception {
-        if (littleEndian) {
-            writer.writeUnsignedIntExs(data);
-        } else {
-            writer.writeUnsignedInts(data);
-        }
+        writer.setLittleEndian(littleEndian);
+        writer.writeUnsignedInts(data);
         return true;
     }
 }

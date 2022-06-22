@@ -19,20 +19,14 @@ public class LongArrayFileHandler implements IFileHandler<long[]> {
     
     @Override
     public long[] load(IPackage vfs, String path, IFullyReader reader, long size) throws Exception {
-        if (littleEndian) {
-            return reader.readLongExs((int) (size / 8));
-        } else {
-            return reader.readLongs((int) (size / 8));
-        }
+        reader.setLittleEndian(littleEndian);
+        return reader.readLongs((int) (size / 8));
     }
     
     @Override
     public boolean save(IPackage vfs, String path, IFullyWriter writer, long[] data) throws Exception {
-        if (littleEndian) {
-            writer.writeLongExs(data);
-        } else {
-            writer.writeLongs(data);
-        }
+        writer.setLittleEndian(littleEndian);
+        writer.writeLongs(data);
         return true;
     }
 }
