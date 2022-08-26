@@ -1,5 +1,9 @@
 package cn.kizzzy.vfs;
 
+import cn.kizzzy.helper.LogHelper;
+import cn.kizzzy.io.IFullyReader;
+import cn.kizzzy.io.IFullyWriter;
+
 import java.lang.reflect.Type;
 
 @SuppressWarnings("unchecked")
@@ -44,4 +48,15 @@ public interface IPackage extends ITree, IStreamGetterFactory {
     }
     
     <T> boolean save(String path, T data, IFileSaver<T> saver);
+    
+    default boolean copyTo(IPackage target, String path) {
+        try (IFullyReader reader = getInputStreamGetter(path).getInput();
+             IFullyWriter writer = target.getOutputStreamGetter(path).getOutput()) {
+            reader.copyTo(writer);
+            return true;
+        } catch (Exception e) {
+            LogHelper.error("copy error: ", e);
+            return false;
+        }
+    }
 }
