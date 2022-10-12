@@ -50,8 +50,12 @@ public interface IPackage extends ITree, IStreamGetterFactory {
     <T> boolean save(String path, T data, IFileSaver<T> saver);
     
     default boolean copyTo(IPackage target, String path) {
+        return copyTo(target, path, path);
+    }
+    
+    default boolean copyTo(IPackage target, String path, String targetPath) {
         try (IFullyReader reader = getInputStreamGetter(path).getInput();
-             IFullyWriter writer = target.getOutputStreamGetter(path).getOutput()) {
+             IFullyWriter writer = target.getOutputStreamGetter(targetPath).getOutput()) {
             reader.copyTo(writer);
             return true;
         } catch (Exception e) {
