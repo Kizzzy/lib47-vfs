@@ -16,4 +16,9 @@ public class StringToFieldsFileConverter extends StringToTableFileConverter<Stri
     protected String[] toEntity(String[] fields) {
         return fields;
     }
+    
+    @Override
+    protected String[] fromEntity(String[] fields) {
+        return fields;
+    }
 }

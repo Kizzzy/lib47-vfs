@@ -1,5 +1,7 @@
 package cn.kizzzy.vfs.converter;
 
+import cn.kizzzy.vfs.IConverter;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -16,7 +18,12 @@ public class StringToBytesConverter implements IConverter<String, byte[]> {
     }
     
     @Override
-    public byte[] convert(String s) {
+    public byte[] to(String s) {
         return s.getBytes(charset);
+    }
+    
+    @Override
+    public String from(byte[] bytes) {
+        return new String(bytes, charset);
     }
 }

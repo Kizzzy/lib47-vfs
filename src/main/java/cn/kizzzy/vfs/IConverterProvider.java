@@ -1,6 +1,6 @@
-package cn.kizzzy.vfs.converter;
+package cn.kizzzy.vfs;
 
-public interface IHandlerProvider {
+public interface IConverterProvider {
     
     <Source, Target> boolean addHandler(Class<Source> sourceClazz, Class<Target> clazz, IConverter<Source, Target> handler);
     

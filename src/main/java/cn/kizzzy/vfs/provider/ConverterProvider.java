@@ -1,10 +1,13 @@
-package cn.kizzzy.vfs.converter;
+package cn.kizzzy.vfs.provider;
+
+import cn.kizzzy.vfs.IConverter;
+import cn.kizzzy.vfs.IConverterProvider;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public class ConverterProvider implements IHandlerProvider {
+public class ConverterProvider implements IConverterProvider {
     
     private final Map<Integer, Map<Integer, Object>> handlerKvs
         = new HashMap<>();

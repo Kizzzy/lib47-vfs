@@ -2,6 +2,7 @@ package cn.kizzzy.vfs.converter;
 
 import cn.kizzzy.data.TableFile;
 import cn.kizzzy.helper.LogHelper;
+import cn.kizzzy.vfs.IConverter;
 
 public abstract class StringToTableFileConverter<T, R extends TableFile<T>> implements IConverter<String, R> {
     
@@ -27,7 +28,7 @@ public abstract class StringToTableFileConverter<T, R extends TableFile<T>> impl
         this.fieldSeparator = fieldSeparator;
     }
     
-    public R convert(String text) {
+    public R to(String text) {
         try {
             String[] var0 = text.split(lineSeparator);
             int i = 0;
@@ -58,4 +59,27 @@ public abstract class StringToTableFileConverter<T, R extends TableFile<T>> impl
     }
     
     protected abstract T toEntity(String[] fields);
+    
+    @Override
+    public String from(R file) {
+        if (skip) {
+            return "";
+        } else {
+            StringBuilder builder = new StringBuilder();
+            if (!skipFirst) {
+                builder.append(file.count).append(lineSeparator);
+            }
+            for (T data : file.dataList) {
+                String[] fields = fromEntity(data);
+                for (String field : fields) {
+                    builder.append(field).append(fieldSeparator);
+                }
+                builder.append(lineSeparator);
+            }
+            
+            return builder.toString();
+        }
+    }
+    
+    protected abstract String[] fromEntity(T entity);
 }
