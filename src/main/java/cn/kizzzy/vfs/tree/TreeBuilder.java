@@ -1,9 +1,9 @@
 package cn.kizzzy.vfs.tree;
 
-import cn.kizzzy.vfs.ITree;
+import cn.kizzzy.vfs.ITreeBuilder;
 import cn.kizzzy.vfs.Separator;
 
-public abstract class TreeBuilder {
+public abstract class TreeBuilder implements ITreeBuilder {
     
     protected final Separator separator;
     
@@ -13,6 +13,4 @@ public abstract class TreeBuilder {
         this.separator = separator;
         this.idGenerator = idGenerator;
     }
-    
-    public abstract ITree build();
 }
