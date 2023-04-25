@@ -13,6 +13,7 @@ import cn.kizzzy.vfs.IPackage;
 import cn.kizzzy.vfs.IStreamGetterFactory;
 import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.handler.BytesFileHandler;
+import cn.kizzzy.vfs.handler.LinesFileHandler;
 import cn.kizzzy.vfs.handler.StringFileHandler;
 import cn.kizzzy.vfs.tree.Leaf;
 import cn.kizzzy.vfs.tree.Node;
@@ -42,6 +43,7 @@ public abstract class AbstractPackage implements IPackage {
     protected void initDefaultHandler() {
         addHandler(byte[].class, new BytesFileHandler());
         addHandler(String.class, new StringFileHandler());
+        addHandler(String[].class, new LinesFileHandler());
     }
     
     @Override
