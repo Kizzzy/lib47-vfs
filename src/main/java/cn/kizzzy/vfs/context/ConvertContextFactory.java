@@ -13,17 +13,17 @@ public class ConvertContextFactory implements IConvertContextFactory {
     }
     
     @Override
-    public <Source, Target> boolean addHandler(Class<Source> sourceClazz, Class<Target> clazz, IConverter<Source, Target> handler) {
-        return handlerProvider.addHandler(sourceClazz, clazz, handler);
+    public <Source, Target> boolean addHandler(Class<Source> sourceClazz, Class<Target> targetClazz, IConverter<Source, Target> handler) {
+        return handlerProvider.addHandler(sourceClazz, targetClazz, handler);
     }
     
     @Override
-    public <Source, Target> boolean removeHandler(Class<Source> sourceClazz, Class<Target> clazz) {
-        return removeHandler(sourceClazz, clazz);
+    public <Source, Target> boolean removeHandler(Class<Source> sourceClazz, Class<Target> targetClazz) {
+        return removeHandler(sourceClazz, targetClazz);
     }
     
     @Override
-    public <Source, Target> IConverter<Source, Target> getHandler(Class<Source> sourceClazz, Class<Target> clazz) {
-        return getHandler(sourceClazz, clazz);
+    public <Source, Target> IConverter<Source, Target> getHandler(Class<Source> sourceClazz, Class<Target> targetClazz) {
+        return getHandler(sourceClazz, targetClazz);
     }
 }

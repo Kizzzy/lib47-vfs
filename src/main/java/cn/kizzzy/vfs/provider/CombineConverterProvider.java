@@ -18,13 +18,13 @@ public class CombineConverterProvider extends ConverterProvider {
     }
     
     @Override
-    public <Source, Target> IConverter<Source, Target> getHandler(Class<Source> sourceClazz, Class<Target> clazz) {
+    public <Source, Target> IConverter<Source, Target> getHandler(Class<Source> sourceClazz, Class<Target> targetClazz) {
         for (IConverterProvider provider : providers) {
-            IConverter<Source, Target> handler = provider.getHandler(sourceClazz, clazz);
+            IConverter<Source, Target> handler = provider.getHandler(sourceClazz, targetClazz);
             if (handler != null) {
                 return handler;
             }
         }
-        return super.getHandler(sourceClazz, clazz);
+        return super.getHandler(sourceClazz, targetClazz);
     }
 }

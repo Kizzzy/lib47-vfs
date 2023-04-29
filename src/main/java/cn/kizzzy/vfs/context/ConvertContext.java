@@ -4,17 +4,19 @@ import cn.kizzzy.vfs.IConvertContext;
 import cn.kizzzy.vfs.IConverter;
 import cn.kizzzy.vfs.IConverterProvider;
 
+import java.util.function.Function;
+
 public class ConvertContext<Source, Target> implements IConvertContext<Target> {
     
     private final IConverterProvider provider;
     
     private final IConvertContext<Source> prev;
     
-    private final IConverter<Source, Target> handler;
+    private final Function<Source, Target> handler;
     
     private final Class<Target> targetClass;
     
-    public ConvertContext(IConverterProvider provider, IConvertContext<Source> prev, IConverter<Source, Target> handler, Class<Target> targetClass) {
+    public ConvertContext(IConverterProvider provider, IConvertContext<Source> prev, Function<Source, Target> handler, Class<Target> targetClass) {
         this.provider = provider;
         this.prev = prev;
         this.handler = handler;
@@ -26,7 +28,12 @@ public class ConvertContext<Source, Target> implements IConvertContext<Target> {
         if (provider != null) {
             IConverter<Target, T> handler = provider.getHandler(targetClass, clazz);
             if (handler != null) {
-                return to(clazz, handler);
+                return to(clazz, handler::to);
+            }
+            
+            IConverter<T, Target> handler1 = provider.getHandler(clazz, targetClass);
+            if (handler1 != null) {
+                return to(clazz, handler1::from);
             }
         }
         
@@ -34,7 +41,7 @@ public class ConvertContext<Source, Target> implements IConvertContext<Target> {
     }
     
     @Override
-    public <T> IConvertContext<T> to(Class<T> clazz, IConverter<Target, T> handler) {
+    public <T> IConvertContext<T> to(Class<T> clazz, Function<Target, T> handler) {
         return new ConvertContext<>(provider, this, handler, clazz);
     }
     
@@ -42,7 +49,7 @@ public class ConvertContext<Source, Target> implements IConvertContext<Target> {
     public Target get() {
         Source source = prev.get();
         if (source != null) {
-            return handler.to(source);
+            return handler.apply(source);
         }
         return null;
     }

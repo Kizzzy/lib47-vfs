@@ -13,32 +13,32 @@ public class ConverterProvider implements IConverterProvider {
         = new HashMap<>();
     
     @Override
-    public <Source, Target> boolean addHandler(Class<Source> sourceClazz, Class<Target> targetClass, IConverter<Source, Target> handler) {
-        IConverter<Source, Target> old = getHandler(sourceClazz, targetClass);
+    public <Source, Target> boolean addHandler(Class<Source> sourceClazz, Class<Target> targetClazz, IConverter<Source, Target> handler) {
+        IConverter<Source, Target> old = getHandler(sourceClazz, targetClazz);
         if (old == null) {
             Map<Integer, Object> kvs = handlerKvs.computeIfAbsent(sourceClazz.hashCode(), k -> {
                 return new HashMap<>();
             });
-            kvs.put(targetClass.hashCode(), handler);
+            kvs.put(targetClazz.hashCode(), handler);
             return true;
         }
         return false;
     }
     
     @Override
-    public <Source, Target> boolean removeHandler(Class<Source> sourceClazz, Class<Target> targetClass) {
+    public <Source, Target> boolean removeHandler(Class<Source> sourceClazz, Class<Target> targetClazz) {
         Map<Integer, Object> kvs = handlerKvs.get(sourceClazz.hashCode());
         if (kvs != null) {
-            kvs.remove(targetClass.hashCode());
+            kvs.remove(targetClazz.hashCode());
         }
         return true;
     }
     
     @Override
-    public <Source, Target> IConverter<Source, Target> getHandler(Class<Source> sourceClazz, Class<Target> targetClass) {
+    public <Source, Target> IConverter<Source, Target> getHandler(Class<Source> sourceClazz, Class<Target> targetClazz) {
         Map<Integer, Object> kvs = handlerKvs.get(sourceClazz.hashCode());
         if (kvs != null) {
-            return (IConverter<Source, Target>) kvs.get(targetClass.hashCode());
+            return (IConverter<Source, Target>) kvs.get(targetClazz.hashCode());
         }
         return null;
     }
