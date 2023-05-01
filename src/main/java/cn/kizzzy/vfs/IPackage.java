@@ -3,8 +3,7 @@ package cn.kizzzy.vfs;
 import cn.kizzzy.helper.LogHelper;
 import cn.kizzzy.io.IFullyReader;
 import cn.kizzzy.io.IFullyWriter;
-import cn.kizzzy.vfs.context.BeginConvertContext;
-import cn.kizzzy.vfs.context.NullConvertContext;
+import cn.kizzzy.vfs.converter.Converter;
 
 import java.lang.reflect.Type;
 
@@ -47,10 +46,7 @@ public interface IPackage extends ITree, IStreamGetterFactory {
     }
     
     default <T> IConvertContext<T> getContext(T data, IConverterProvider provider) {
-        if (data != null) {
-            return new BeginConvertContext<>(provider, data, (Class<T>) data.getClass());
-        }
-        return new NullConvertContext<>();
+        return Converter.getContext(provider, data);
     }
     
     default <T> boolean save(String path, T data) {
