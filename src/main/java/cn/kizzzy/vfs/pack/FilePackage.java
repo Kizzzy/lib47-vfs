@@ -3,7 +3,7 @@ package cn.kizzzy.vfs.pack;
 import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.Separator;
 import cn.kizzzy.vfs.stream.FileStreamGetterFactory;
-import cn.kizzzy.vfs.tree.EmptyTree;
+import cn.kizzzy.vfs.tree.FileTreeBuilder;
 
 import java.io.File;
 
@@ -12,7 +12,7 @@ public class FilePackage extends AbstractPackage {
     private final String root;
     
     public FilePackage(String root) {
-        this(root, new EmptyTree());
+        this(root, new FileTreeBuilder(root).build());
     }
     
     public FilePackage(String root, ITree tree) {
