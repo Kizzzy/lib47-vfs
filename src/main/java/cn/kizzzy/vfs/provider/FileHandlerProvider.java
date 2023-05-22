@@ -1,15 +1,15 @@
-package cn.kizzzy.vfs.handler;
+package cn.kizzzy.vfs.provider;
 
 import cn.kizzzy.vfs.IFileHandler;
-import cn.kizzzy.vfs.IFileHandlerContainer;
+import cn.kizzzy.vfs.IFileHandlerProvider;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FileHandlerContainer implements IFileHandlerContainer {
+public class FileHandlerProvider implements IFileHandlerProvider {
     
-    protected final Map<Type, IFileHandler<?>> handlerKvs
+    private final Map<Type, IFileHandler<?>> handlerKvs
         = new HashMap<>();
     
     @Override

@@ -3,7 +3,6 @@ package cn.kizzzy.vfs.pack;
 import cn.kizzzy.helper.LogHelper;
 import cn.kizzzy.io.IFullyReader;
 import cn.kizzzy.io.IFullyWriter;
-import cn.kizzzy.vfs.IFileHandler;
 import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
 import cn.kizzzy.vfs.IHolderInputStreamGetter;
@@ -15,23 +14,18 @@ import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.handler.BytesFileHandler;
 import cn.kizzzy.vfs.handler.LinesFileHandler;
 import cn.kizzzy.vfs.handler.StringFileHandler;
+import cn.kizzzy.vfs.provider.FileHandlerProvider;
 import cn.kizzzy.vfs.tree.Leaf;
 import cn.kizzzy.vfs.tree.Node;
 import cn.kizzzy.vfs.tree.Page;
 
-import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public abstract class AbstractPackage implements IPackage {
+public abstract class AbstractPackage extends FileHandlerProvider implements IPackage {
     
     protected final ITree tree;
     
     protected final IStreamGetterFactory factory;
-    
-    protected final Map<Type, IFileHandler<?>> handlerKvs
-        = new HashMap<>();
     
     public AbstractPackage(ITree tree, IStreamGetterFactory factory) {
         this.tree = tree;
@@ -44,17 +38,6 @@ public abstract class AbstractPackage implements IPackage {
         addHandler(byte[].class, new BytesFileHandler());
         addHandler(String.class, new StringFileHandler());
         addHandler(String[].class, new LinesFileHandler());
-    }
-    
-    @Override
-    public boolean addHandler(Type type, IFileHandler<?> handler) {
-        handlerKvs.put(type, handler);
-        return true;
-    }
-    
-    @Override
-    public IFileHandler<?> getHandler(Type clazz) {
-        return handlerKvs.get(clazz);
     }
     
     @Override

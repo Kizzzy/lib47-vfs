@@ -3,7 +3,7 @@ package cn.kizzzy.vfs;
 import java.lang.reflect.Type;
 
 @SuppressWarnings("unchecked")
-public interface IFileHandlerContainer {
+public interface IFileHandlerProvider {
     
     default <T> boolean addHandler(Class<T> clazz, IFileHandler<T> handler) {
         return addHandler((Type) clazz, handler);

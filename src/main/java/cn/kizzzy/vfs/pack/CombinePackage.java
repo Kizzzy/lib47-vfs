@@ -1,11 +1,13 @@
 package cn.kizzzy.vfs.pack;
 
 import cn.kizzzy.vfs.IFileHandler;
+import cn.kizzzy.vfs.IFileHandlerProvider;
 import cn.kizzzy.vfs.IFileLoader;
 import cn.kizzzy.vfs.IFileSaver;
 import cn.kizzzy.vfs.IInputStreamGetter;
 import cn.kizzzy.vfs.IOutputStreamGetter;
 import cn.kizzzy.vfs.IPackage;
+import cn.kizzzy.vfs.provider.FileHandlerProvider;
 import cn.kizzzy.vfs.tree.Forest;
 
 import java.lang.reflect.Type;
@@ -14,7 +16,11 @@ import java.util.List;
 
 public class CombinePackage extends Forest implements IPackage {
     
-    private final List<IPackage> vfsList = new LinkedList<>();
+    private final List<IPackage> vfsList
+        = new LinkedList<>();
+    
+    private final IFileHandlerProvider provider
+        = new FileHandlerProvider();
     
     public CombinePackage(IPackage... vfsList) {
         for (IPackage vfs : vfsList) {
@@ -40,12 +46,18 @@ public class CombinePackage extends Forest implements IPackage {
     
     @Override
     public boolean addHandler(Type type, IFileHandler<?> handler) {
-        return false;
+        return provider.addHandler(type, handler);
     }
     
     @Override
     public IFileHandler<?> getHandler(Type clazz) {
-        return null;
+        for (IPackage vfs : vfsList) {
+            IFileHandler<?> handler = vfs.getHandler(clazz);
+            if (handler != null) {
+                return handler;
+            }
+        }
+        return provider.getHandler(clazz);
     }
     
     @Override
