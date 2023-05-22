@@ -16,7 +16,7 @@ public class FilePackage extends AbstractPackage {
     }
     
     public FilePackage(String root, ITree tree) {
-        super(tree, new FileStreamGetterFactory(root, tree));
+        super(tree, new FileStreamGetterFactory(root));
         this.root = root;
     }
     

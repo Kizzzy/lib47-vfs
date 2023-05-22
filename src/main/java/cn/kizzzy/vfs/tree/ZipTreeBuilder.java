@@ -34,7 +34,10 @@ public class ZipTreeBuilder extends TreeBuilderAdapter<ZipFile, ZipEntry> {
                     
                     @Override
                     public Iterable<ZipEntry> entries(ZipFile idxFile) {
-                        return idxFile.stream().collect(Collectors.toList());
+                        return idxFile
+                            .stream()
+                            .filter(e -> !e.getName().endsWith(separator.getDesiredSplitter()))
+                            .collect(Collectors.toList());
                     }
                     
                     @Override

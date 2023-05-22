@@ -2,16 +2,16 @@ package cn.kizzzy.vfs.stream;
 
 import cn.kizzzy.vfs.IInputStreamGetter;
 import cn.kizzzy.vfs.IOutputStreamGetter;
-import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.Separator;
+import cn.kizzzy.vfs.tree.FileTreeBuilder;
 import cn.kizzzy.vfs.tree.Leaf;
 
 public class FileStreamGetterFactory extends StreamGetterFactoryAdapter {
     
     private final String root;
     
-    public FileStreamGetterFactory(String root, ITree tree) {
-        super(tree);
+    public FileStreamGetterFactory(String root) {
+        super(new FileTreeBuilder(root).build());
         this.root = Separator.FILE_SEPARATOR.replace(root);
     }
     
