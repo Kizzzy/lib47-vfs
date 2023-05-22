@@ -11,6 +11,6 @@ public class ZipPackage extends AbstractPackage {
     }
     
     public ZipPackage(String file, ITree tree) {
-        super(tree, new ZipStreamGetterFactory(file));
+        super(tree, new ZipStreamGetterFactory(file, tree));
     }
 }

@@ -29,11 +29,22 @@ public class Tree implements ITree {
         return true;
     }
     
+    @Override
+    public Leaf getLeaf(int id) {
+        Node node = getNode(id);
+        if (node.leaf) {
+            return (Leaf) node;
+        }
+        return null;
+    }
+    
+    @Override
     public Leaf getLeaf(String path) {
         path = separator.replace(path);
         return root.fileKvs.get(path);
     }
     
+    @Override
     public Node getNode(int id) {
         if (id == root.id || id == 0) {
             return root;

@@ -2,7 +2,6 @@ package cn.kizzzy.vfs.stream;
 
 import cn.kizzzy.vfs.IHolderInputStreamGetter;
 import cn.kizzzy.vfs.IInputStreamGetter;
-import cn.kizzzy.vfs.IOutputStreamGetter;
 import cn.kizzzy.vfs.IStreamGetterFactory;
 import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.tree.Leaf;
@@ -10,9 +9,7 @@ import cn.kizzzy.vfs.tree.Leaf;
 import java.util.function.Function;
 
 @SuppressWarnings("unchecked")
-public class LeafStreamGetterFactory<T extends IHolderInputStreamGetter> implements IStreamGetterFactory {
-    
-    private final ITree tree;
+public class LeafStreamGetterFactory<T extends IHolderInputStreamGetter> extends StreamGetterFactoryAdapter implements IStreamGetterFactory {
     
     private final IStreamGetterFactory factory;
     
@@ -21,15 +18,14 @@ public class LeafStreamGetterFactory<T extends IHolderInputStreamGetter> impleme
     private final Function<T, String> callback;
     
     public LeafStreamGetterFactory(ITree tree, IStreamGetterFactory factory, Class<T> clazz, Function<T, String> callback) {
-        this.tree = tree;
+        super(tree);
         this.factory = factory;
         this.clazz = clazz;
         this.callback = callback;
     }
     
     @Override
-    public IInputStreamGetter getInputStreamGetter(String path) {
-        Leaf leaf = tree.getLeaf(path);
+    protected IInputStreamGetter getInputStreamGetterImpl(Leaf leaf) {
         if (!clazz.isInstance(leaf.item)) {
             return null;
         }
@@ -44,10 +40,5 @@ public class LeafStreamGetterFactory<T extends IHolderInputStreamGetter> impleme
         }
         
         return entry;
-    }
-    
-    @Override
-    public IOutputStreamGetter getOutputStreamGetter(String path) {
-        return null;
     }
 }

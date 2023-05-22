@@ -71,6 +71,17 @@ public class CombinePackage extends Forest implements IPackage {
     }
     
     @Override
+    public IInputStreamGetter getInputStreamGetter(int id) {
+        for (IPackage vfs : vfsList) {
+            IInputStreamGetter getter = vfs.getInputStreamGetter(id);
+            if (getter != null) {
+                return getter;
+            }
+        }
+        return null;
+    }
+    
+    @Override
     public IInputStreamGetter getInputStreamGetter(String path) {
         for (IPackage vfs : vfsList) {
             IInputStreamGetter getter = vfs.getInputStreamGetter(path);

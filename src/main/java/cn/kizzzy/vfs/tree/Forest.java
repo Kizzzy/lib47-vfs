@@ -7,7 +7,8 @@ import java.util.List;
 
 public class Forest implements ITree {
     
-    private final List<ITree> trees = new LinkedList<>();
+    private final List<ITree> trees
+        = new LinkedList<>();
     
     public Forest(ITree... trees) {
         for (ITree tree : trees) {
@@ -47,6 +48,17 @@ public class Forest implements ITree {
     
     public void removeTree(ITree tree) {
         trees.remove(tree);
+    }
+    
+    @Override
+    public Leaf getLeaf(int id) {
+        for (ITree tree : trees) {
+            Leaf leaf = tree.getLeaf(id);
+            if (leaf != null) {
+                return leaf;
+            }
+        }
+        return null;
     }
     
     @Override

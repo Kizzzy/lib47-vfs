@@ -12,6 +12,8 @@ public interface ITree {
     
     boolean stop();
     
+    Leaf getLeaf(int id);
+    
     Leaf getLeaf(String path);
     
     Node getNode(int id);

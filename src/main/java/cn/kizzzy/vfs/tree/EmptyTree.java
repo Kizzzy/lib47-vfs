@@ -17,6 +17,11 @@ public class EmptyTree implements ITree {
     }
     
     @Override
+    public Leaf getLeaf(int id) {
+        return null;
+    }
+    
+    @Override
     public Leaf getLeaf(String path) {
         return null;
     }

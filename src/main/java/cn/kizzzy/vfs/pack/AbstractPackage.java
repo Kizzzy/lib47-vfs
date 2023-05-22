@@ -41,6 +41,11 @@ public abstract class AbstractPackage extends FileHandlerProvider implements IPa
     }
     
     @Override
+    public IInputStreamGetter getInputStreamGetter(int id) {
+        return factory.getInputStreamGetter(id);
+    }
+    
+    @Override
     public IInputStreamGetter getInputStreamGetter(String path) {
         if (exist(path)) {
             return factory.getInputStreamGetter(path);
@@ -95,6 +100,11 @@ public abstract class AbstractPackage extends FileHandlerProvider implements IPa
     @Override
     public boolean stop() {
         return tree.stop();
+    }
+    
+    @Override
+    public Leaf getLeaf(int id) {
+        return tree.getLeaf(id);
     }
     
     @Override
