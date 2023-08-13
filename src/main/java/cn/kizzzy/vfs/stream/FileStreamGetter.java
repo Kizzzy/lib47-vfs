@@ -1,7 +1,6 @@
 package cn.kizzzy.vfs.stream;
 
 import cn.kizzzy.helper.FileHelper;
-import cn.kizzzy.io.BufferedInputStreamReader;
 import cn.kizzzy.io.IFullyReader;
 import cn.kizzzy.io.IFullyWriter;
 import cn.kizzzy.io.RandomAccessFileReader;
@@ -20,7 +19,8 @@ public class FileStreamGetter implements IInputStreamGetter, IOutputStreamGetter
     }
     
     public IFullyReader getInput() throws Exception {
-        return new BufferedInputStreamReader(new RandomAccessFileReader(file));
+        // return new BufferedInputStreamReader(new RandomAccessFileReader(file));
+        return new RandomAccessFileReader(file);
     }
     
     @Override
