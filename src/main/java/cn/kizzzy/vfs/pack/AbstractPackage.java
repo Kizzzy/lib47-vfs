@@ -1,6 +1,5 @@
 package cn.kizzzy.vfs.pack;
 
-import cn.kizzzy.helper.LogHelper;
 import cn.kizzzy.io.IFullyReader;
 import cn.kizzzy.io.IFullyWriter;
 import cn.kizzzy.vfs.IFileLoader;
@@ -18,10 +17,14 @@ import cn.kizzzy.vfs.provider.FileHandlerProvider;
 import cn.kizzzy.vfs.tree.Leaf;
 import cn.kizzzy.vfs.tree.Node;
 import cn.kizzzy.vfs.tree.Page;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public abstract class AbstractPackage extends FileHandlerProvider implements IPackage {
+    
+    protected static final Logger logger = LoggerFactory.getLogger(IPackage.class);
     
     protected final ITree tree;
     
@@ -72,7 +75,7 @@ public abstract class AbstractPackage extends FileHandlerProvider implements IPa
                 }
             }
         } catch (Exception e) {
-            LogHelper.error(String.format("load error: %s", path), e);
+            logger.error("load error: {}", path, e);
         }
         return null;
     }
@@ -87,7 +90,7 @@ public abstract class AbstractPackage extends FileHandlerProvider implements IPa
                 }
             }
         } catch (Exception e) {
-            LogHelper.error(String.format("save error: %s", path), e);
+            logger.error("save error: %{}", path, e);
         }
         return false;
     }

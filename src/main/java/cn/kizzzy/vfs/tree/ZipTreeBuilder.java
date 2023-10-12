@@ -1,6 +1,5 @@
 package cn.kizzzy.vfs.tree;
 
-import cn.kizzzy.helper.LogHelper;
 import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.Separator;
 
@@ -47,7 +46,7 @@ public class ZipTreeBuilder extends TreeBuilderAdapter<ZipFile, ZipEntry> {
                 });
             }
         } catch (Exception e) {
-            LogHelper.error(String.format("build tree failed: %s", zipFile), e);
+            logger.error(String.format("build tree failed: %s", zipFile), e);
             return null;
         }
     }

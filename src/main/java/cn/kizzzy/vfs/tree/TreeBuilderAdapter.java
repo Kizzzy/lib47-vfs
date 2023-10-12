@@ -1,6 +1,5 @@
 package cn.kizzzy.vfs.tree;
 
-import cn.kizzzy.helper.LogHelper;
 import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.Separator;
 
@@ -27,7 +26,7 @@ public abstract class TreeBuilderAdapter<T, R> extends TreeBuilder {
             }
             return new Tree(root, separator);
         } catch (Exception e) {
-            LogHelper.error(String.format("build tree failed: %s", helper.idxPath(idxFile)), e);
+            logger.error(String.format("build tree failed: %s", helper.idxPath(idxFile)), e);
             return null;
         }
     }

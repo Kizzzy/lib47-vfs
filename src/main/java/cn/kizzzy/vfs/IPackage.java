@@ -1,6 +1,5 @@
 package cn.kizzzy.vfs;
 
-import cn.kizzzy.helper.LogHelper;
 import cn.kizzzy.io.IFullyReader;
 import cn.kizzzy.io.IFullyWriter;
 import cn.kizzzy.vfs.converter.Converter;
@@ -28,15 +27,6 @@ public interface IPackage extends ITree, IStreamGetterFactory, IFileHandlerProvi
     
     Object load(String path, IFileLoader<?> loader);
     
-    default <T> IConvertContext<T> getContext(String path, Class<T> clazz, IConverterProvider provider) {
-        T data = load(path, clazz);
-        return getContext(data, provider);
-    }
-    
-    default <T> IConvertContext<T> getContext(T data, IConverterProvider provider) {
-        return Converter.getContext(provider, data);
-    }
-    
     default <T> boolean save(String path, T data) {
         IFileHandler<T> saver = (IFileHandler<T>) getHandler(data.getClass());
         if (saver != null) {
@@ -47,18 +37,24 @@ public interface IPackage extends ITree, IStreamGetterFactory, IFileHandlerProvi
     
     <T> boolean save(String path, T data, IFileSaver<T> saver);
     
-    default boolean copyTo(IPackage target, String path) {
+    default boolean copyTo(IPackage target, String path) throws Exception {
         return copyTo(target, path, path);
     }
     
-    default boolean copyTo(IPackage target, String path, String targetPath) {
+    default boolean copyTo(IPackage target, String path, String targetPath) throws Exception {
         try (IFullyReader reader = getInputStreamGetter(path).getInput();
              IFullyWriter writer = target.getOutputStreamGetter(targetPath).getOutput()) {
             reader.copyTo(writer);
             return true;
-        } catch (Exception e) {
-            LogHelper.error("copy error: ", e);
-            return false;
         }
+    }
+    
+    default <T> IConvertContext<T> getContext(String path, Class<T> clazz, IConverterProvider provider) {
+        T data = load(path, clazz);
+        return getContext(data, provider);
+    }
+    
+    default <T> IConvertContext<T> getContext(T data, IConverterProvider provider) {
+        return Converter.getContext(provider, data);
     }
 }

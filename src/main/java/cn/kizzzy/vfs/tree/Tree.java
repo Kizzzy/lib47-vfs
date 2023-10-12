@@ -1,14 +1,17 @@
 package cn.kizzzy.vfs.tree;
 
-import cn.kizzzy.helper.LogHelper;
 import cn.kizzzy.vfs.ITree;
 import cn.kizzzy.vfs.Separator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class Tree implements ITree {
+    
+    protected static final Logger logger = LoggerFactory.getLogger(Tree.class);
     
     protected Root root;
     
@@ -111,7 +114,7 @@ public class Tree implements ITree {
             Pattern pattern = Pattern.compile(regex);
             TreeHelper.listNodeByRegex(list, root, pattern);
         } catch (Exception e) {
-            LogHelper.info(String.format("listNodeByRegex failed: %s", regex), e);
+            logger.error("listNodeByRegex failed: {}", regex, e);
         }
         return list;
     }

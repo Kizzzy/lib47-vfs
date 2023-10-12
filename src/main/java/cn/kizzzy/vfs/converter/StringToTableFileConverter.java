@@ -1,10 +1,13 @@
 package cn.kizzzy.vfs.converter;
 
 import cn.kizzzy.data.TableFile;
-import cn.kizzzy.helper.LogHelper;
 import cn.kizzzy.vfs.IConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class StringToTableFileConverter<T, R extends TableFile<T>> implements IConverter<String, R> {
+    
+    protected static final Logger logger = LoggerFactory.getLogger(StringToTableFileConverter.class);
     
     protected final boolean skip;
     
@@ -53,7 +56,7 @@ public abstract class StringToTableFileConverter<T, R extends TableFile<T>> impl
             }
             return file;
         } catch (Exception e) {
-            LogHelper.error("load table file error", e);
+            logger.error("load table file error", e);
             return null;
         }
     }
