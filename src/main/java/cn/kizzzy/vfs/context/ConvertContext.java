@@ -4,19 +4,17 @@ import cn.kizzzy.vfs.IConvertContext;
 import cn.kizzzy.vfs.IConverter;
 import cn.kizzzy.vfs.IConverterProvider;
 
-import java.util.function.Function;
-
 public class ConvertContext<Source, Target> implements IConvertContext<Target> {
     
     private final IConverterProvider provider;
     
     private final IConvertContext<Source> prev;
     
-    private final Function<Source, Target> handler;
+    private final Handler<Source, Target> handler;
     
     private final Class<Target> targetClass;
     
-    public ConvertContext(IConverterProvider provider, IConvertContext<Source> prev, Function<Source, Target> handler, Class<Target> targetClass) {
+    public ConvertContext(IConverterProvider provider, IConvertContext<Source> prev, Handler<Source, Target> handler, Class<Target> targetClass) {
         this.provider = provider;
         this.prev = prev;
         this.handler = handler;
@@ -41,15 +39,15 @@ public class ConvertContext<Source, Target> implements IConvertContext<Target> {
     }
     
     @Override
-    public <T> IConvertContext<T> to(Class<T> clazz, Function<Target, T> handler) {
+    public <T> IConvertContext<T> to(Class<T> clazz, Handler<Target, T> handler) {
         return new ConvertContext<>(provider, this, handler, clazz);
     }
     
     @Override
-    public Target get() {
+    public Target get() throws Exception {
         Source source = prev.get();
         if (source != null) {
-            return handler.apply(source);
+            return handler.handle(source);
         }
         return null;
     }

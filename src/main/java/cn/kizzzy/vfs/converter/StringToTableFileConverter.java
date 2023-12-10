@@ -31,34 +31,28 @@ public abstract class StringToTableFileConverter<T, R extends TableFile<T>> impl
         this.fieldSeparator = fieldSeparator;
     }
     
-    public R to(String text) {
-        try {
-            String[] var0 = text.split(lineSeparator);
-            int i = 0;
-            int count = var0.length;
-            R file = clazz.newInstance();
-            if (!this.skip) {
-                if (!this.skipFirst) {
-                    file.count = Integer.parseInt(var0[i++].trim());
-                    count = file.count;
-                }
-                
-                for (int k = 0; k < count; ++k) {
-                    String[] var1 = var0[i++].trim().split(this.fieldSeparator);
-                    if (var1.length <= 0) {
-                        continue;
-                    }
-                    
-                    T data = this.toEntity(var1);
-                    file.dataList.add(data);
-                }
-                
+    public R to(String text) throws Exception {
+        String[] var0 = text.split(lineSeparator);
+        int i = 0;
+        int count = var0.length;
+        R file = clazz.newInstance();
+        if (!this.skip) {
+            if (!this.skipFirst) {
+                file.count = Integer.parseInt(var0[i++].trim());
+                count = file.count;
             }
-            return file;
-        } catch (Exception e) {
-            logger.error("load table file error", e);
-            return null;
+            
+            for (int k = 0; k < count; ++k) {
+                String[] var1 = var0[i++].trim().split(this.fieldSeparator);
+                if (var1.length <= 0) {
+                    continue;
+                }
+                
+                T data = this.toEntity(var1);
+                file.dataList.add(data);
+            }
         }
+        return file;
     }
     
     protected abstract T toEntity(String[] fields);
