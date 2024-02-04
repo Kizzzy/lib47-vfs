@@ -8,8 +8,8 @@ public class FieldsFileHandler extends TableFileHandler<String[]> {
         super();
     }
     
-    public FieldsFileHandler(Charset charset, boolean skip, boolean skipFirst, String lineSeparator, String fieldSeparator) {
-        super(charset, skip, skipFirst, lineSeparator, fieldSeparator);
+    public FieldsFileHandler(Charset charset, boolean skip) {
+        super(charset, skip);
     }
     
     @Override
