@@ -32,13 +32,18 @@ public abstract class TreeBuilderAdapter<T, R> extends TreeBuilder {
     }
     
     protected void listImpl(Root root, Node parent, R item, Helper<T, R> helper) {
-        String[] names = separator.split(helper.itemPath(item));
+        String raw_path = helper.itemPath(item);
+        if (raw_path == null) {
+            return;
+        }
+        
+        String[] names = separator.split(raw_path);
         int i = 0;
         for (String name : names) {
             Node child = parent.children.get(name);
             if (child == null) {
                 if (i == names.length - 1) {
-                    String path = separator.replace(helper.itemPath(item));
+                    String path = separator.replace(raw_path);
                     Leaf leaf = new Leaf(idGenerator.getId(), name, root.name, path, item);
                     root.fileKvs.put(leaf.path, leaf);
                     child = leaf;
