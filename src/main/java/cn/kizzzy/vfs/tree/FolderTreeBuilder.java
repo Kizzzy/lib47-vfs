@@ -7,35 +7,32 @@ import cn.kizzzy.vfs.ITreeBuilder;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class FolderTreeBuilder<IdxFile> implements ITreeBuilder {
+public abstract class FolderTreeBuilder implements ITreeBuilder {
+    
+    private final String root;
     
     private final String folder;
     
-    private final IPackage rootVfs;
-    
-    private final Class<IdxFile> clazz;
-    
     private final IdGenerator idGenerator;
     
-    public FolderTreeBuilder(IPackage rootVfs, String folder, Class<IdxFile> clazz, IdGenerator idGenerator) {
-        this.rootVfs = rootVfs;
+    public FolderTreeBuilder(String root, String folder, IdGenerator idGenerator) {
+        this.root = root;
         this.folder = folder;
-        this.clazz = clazz;
         this.idGenerator = idGenerator;
     }
     
     @Override
     public ITree build() {
         List<ITree> trees = new LinkedList<>();
+        trees.add(new FileTreeBuilder(root, idGenerator).build());
+        
+        IPackage rootVfs = getRootVfs(root);
         for (Node node : rootVfs.listNode(folder)) {
             if (node.leaf) {
                 Leaf leaf = (Leaf) node;
-                if (acceptLeaf(leaf)) {
-                    IdxFile idxFile = rootVfs.load(leaf.path, clazz);
-                    if (idxFile != null) {
-                        ITree tree = buildTree(idxFile, idGenerator);
-                        trees.add(tree);
-                    }
+                ITree tree = buildTree(rootVfs, leaf, idGenerator);
+                if (tree != null) {
+                    trees.add(tree);
                 }
             }
         }
@@ -43,7 +40,7 @@ public abstract class FolderTreeBuilder<IdxFile> implements ITreeBuilder {
         return new Forest(trees);
     }
     
-    protected abstract boolean acceptLeaf(Leaf leaf);
+    protected abstract IPackage getRootVfs(String root);
     
-    protected abstract ITree buildTree(IdxFile idxFile, IdGenerator idGenerator);
+    protected abstract ITree buildTree(IPackage rootVfs, Leaf leaf, IdGenerator idGenerator);
 }
