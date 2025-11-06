@@ -26,6 +26,10 @@ public class LeafStreamGetterFactory<T extends IHolderInputStreamGetter> extends
     
     @Override
     protected IInputStreamGetter getInputStreamGetterImpl(Leaf leaf) {
+        if (leaf.item == null) {
+            return factory.getInputStreamGetter(leaf.path);
+        }
+        
         if (!clazz.isInstance(leaf.item)) {
             return null;
         }
